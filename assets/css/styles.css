@@ -18,7 +18,8 @@
   --lig: 75%;
   --second-hue: 219;
   --first-color: hsl(var(--first-hue), var(--sat), var(--lig));
-  --first-color-alt: hsl(var(--first-hue), var(--sat), 71%); /* -4% */
+  --first-color-alt: hsl(var(--first-hue), var(--sat), 71%);
+  /* -4% */
   --title-color: hsl(var(--second-hue), 15%, 95%);
   --text-color: hsl(var(--second-hue), 8%, 75%);
   --text-color-light: hsl(var(--second-hue), 4%, 55%);
@@ -82,7 +83,8 @@ textarea {
 body {
   background-color: var(--body-color);
   color: var(--text-color);
-  transition: 0.4s; /* for light mode animation */
+  transition: 0.4s;
+  /* for light mode animation */
 }
 
 h1,
@@ -183,6 +185,7 @@ body.light-theme {
 .light-theme::-webkit-scrollbar {
   background-color: hsl(var(--second-hue), 8%, 80%);
 }
+
 /*=============== REUSABLE CSS CLASSES ===============*/
 .container {
   max-width: 968px;
@@ -279,11 +282,9 @@ body.light-theme {
 
 /* Active link */
 .active-link {
-  background: linear-gradient(
-    180deg,
-    hsla(var(--first-hue), var(--sat), var(--lig), 0.5),
-    hsla(var(--first-hue), var(--sat), var(--lig), 0.2)
-  );
+  background: linear-gradient(180deg,
+      hsla(var(--first-hue), var(--sat), var(--lig), 0.5),
+      hsla(var(--first-hue), var(--sat), var(--lig), 0.2));
   box-shadow: 0 0 16px hsla(var(--first-hue), var(--sat), var(--lig), 0.4);
   border-radius: 5rem;
 
@@ -337,11 +338,9 @@ body.light-theme {
   justify-self: center;
   width: 190px;
   height: 293px;
-  background: linear-gradient(
-    36deg,
-    hsla(var(--first-hue), var(--sat), var(--lig), 0.5),
-    hsla(var(--first-hue), var(--sat), var(--lig), 0.1)
-  );
+  background: linear-gradient(36deg,
+      hsla(var(--first-hue), var(--sat), var(--lig), 0.5),
+      hsla(var(--first-hue), var(--sat), var(--lig), 0.1));
 
   border-radius: 10rem 10rem 1rem 1rem;
   display: flex;
@@ -632,11 +631,97 @@ body.light-theme {
   color: var(--first-color);
   cursor: pointer;
 }
+
 /*Active modal*/
 
 .active-modal {
   visibility: visible;
   opacity: 1;
+}
+
+/*=============== QUALIFICATION ===============*/
+.qualification__container {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.qualification__tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.qualification__button {
+  font-size: var(--h3-font-size);
+  font-weight: var(--font-medium);
+  margin: 0 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.qualification__button:hover {
+  color: var(--first-color);
+}
+
+.qualification__icon {
+  font-size: 1.8rem;
+  margin-right: 0.25rem;
+}
+
+.qualification__active {
+  color: var(--first-color);
+}
+
+.qualification__sections {
+  display: grid;
+  grid-template-columns: 0.5fr;
+  justify-content: center;
+}
+
+.qualification__content {
+  display: none;
+}
+
+.qualification__content.qualification__active {
+  display: block;
+}
+
+.qualification__data {
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  column-gap: 1.5rem;
+}
+
+.qualification__title {
+  font-size: var(--normal-font-size);
+  font-weight: var(--font-medium);
+}
+
+.qualification__subtitle {
+  display: inline-block;
+  font-size: var(--small-font-size);
+  margin-bottom: 1rem;
+}
+
+.qualification__calendar {
+  font-size: var(--smaller-font-size);
+  color: var(--text-color-light);
+}
+
+.qualification__rounder {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  background-color: var(--first-color);
+  border-radius: 50%;
+}
+
+.qualification__line {
+  display: block;
+  width: 1px;
+  height: 100%;
+  background-color: var(--first-color);
+  transform: translate(6px, -7px);
 }
 
 /*=============== WORK ===============*/
@@ -703,10 +788,10 @@ body.light-theme {
   color: var(--body-color);
 }
 
-.reacts{
+.reacts {
   text-align: center;
   position: relative;
-  top:85px;
+  top: 85px;
 }
 
 /*=============== TESTIMONIAL ===============*/
@@ -845,6 +930,7 @@ body.light-theme {
 .contact__form-area textarea {
   resize: none;
 }
+
 /*=============== FOOTER ===============*/
 .footer {
   background-color: var(--first-color);
@@ -1062,6 +1148,7 @@ body.light-theme {
   .contact__form {
     width: 340px;
   }
+
   /* .contact__info {
     grid-template-columns: 350px;
     justify-content: center;
@@ -1115,6 +1202,7 @@ body.light-theme {
   .home__img {
     width: 220px;
   }
+
   .home__social-link {
     padding: 0.4rem;
     font-size: 1.25rem;
@@ -1223,4 +1311,131 @@ body.light-theme {
     padding: 0.4rem;
     border-radius: 0.5rem;
   }
+}
+
+/*=============== ANIMATIONS AND VISUAL ENHANCEMENTS ===============*/
+
+/* Floating Animation for Hero Image */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.home__img {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Card Hover Effects */
+/* Glassmorphism Gradient Card Style */
+.work__card,
+.services__card,
+.skills__content,
+.testimonial__card,
+.about__box,
+.contact__card {
+  background: linear-gradient(135deg,
+      hsla(var(--second-hue), 32%, 20%, 0.5) 0%,
+      hsla(var(--second-hue), 32%, 12%, 0.3) 100%);
+  backdrop-filter: blur(12px);
+  /* Blur effect */
+  -webkit-backdrop-filter: blur(12px);
+  /* Safari support */
+  border: 1px solid hsla(var(--second-hue), 32%, 35%, 0.3);
+  /* Subtle border */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+}
+
+.work__card:hover,
+.services__card:hover,
+.skills__content:hover,
+.testimonial__card:hover,
+.about__box:hover,
+.contact__card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  /* Slightly more opaque gradient on hover */
+  background: linear-gradient(135deg,
+      hsla(var(--second-hue), 32%, 25%, 0.6) 0%,
+      hsla(var(--second-hue), 32%, 15%, 0.4) 100%);
+  border-color: var(--first-color);
+  /* Highlight border on hover */
+}
+
+/* Button Glow Effect */
+.button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: var(--first-color-alt);
+  transition: .4s;
+  z-index: -1;
+  border-radius: .8rem;
+}
+
+.button:hover::before {
+  width: 100%;
+}
+
+/* Button Mirror Sheen Effect */
+.button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  /* No transition on reset */
+  pointer-events: none;
+}
+
+.button:hover::after {
+  left: 150%;
+  transition: left 0.6s ease-in-out;
+}
+
+/* Scroll Bar Styling */
+::-webkit-scrollbar {
+  width: 0.6rem;
+  border-radius: .5rem;
+  background-color: hsl(var(--second-hue), 8%, 38%);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--second-hue), 8%, 26%);
+  border-radius: .5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--second-hue), 8%, 20%);
+}
+
+/* Text Gradient for Headings (Optional, allows for more pop) */
+.home__name,
+.section__title {
+  background: linear-gradient(to right, var(--first-color), var(--first-color-alt));
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* transition: .4s; */
+  /* Note: color: transparent usually needed for gradient text, but keeping fallback for now */
 }
