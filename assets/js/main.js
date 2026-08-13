@@ -1,263 +1,372 @@
-﻿/*=============== CHANGE BACKGROUND HEADER ===============*/
-function scrollHeader() {
-  const header = document.getElementById("header");
-  // When the scroll is greater than 50 viewport height, add the scroll-header class to the header tag
-  if (this.scrollY >= 50) header.classList.add("scroll-header");
-  else header.classList.remove("scroll-header");
-}
-window.addEventListener("scroll", scrollHeader);
+/**
+ * Main JavaScript for Keerthivasan V - Personal Portfolio
+ * Full-Stack Developer & UI/UX Designer
+ */
 
-/*=============== SERVICES MODAL ===============*/
-// Get the modal
-const modalViews = document.querySelectorAll(".services__modal"),
-  modalBtns = document.querySelectorAll(".services__button"),
-  modalClose = document.querySelectorAll(".services__modal-close");
+document.addEventListener('DOMContentLoaded', () => {
+    /*=============== GSAP PRELOADER ANIMATION ===============*/
+    const loader = document.getElementById('bg-loader');
+    
+    function hideLoader() {
+        if (!loader) return;
+        
+        if (typeof gsap !== 'undefined') {
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    loader.style.display = 'none';
+                }
+            });
 
-// When the user clicks on the button, open the modal
-let modal = function (modalClick) {
-  modalViews[modalClick].classList.add("active-modal");
-};
+            tl.to('.loader-wrapper', {
+                scale: 1.15,
+                opacity: 0,
+                duration: 0.5,
+                ease: 'power2.inOut',
+                delay: 0.6
+            })
+            .to(loader, {
+                yPercent: -100,
+                duration: 0.8,
+                ease: 'expo.inOut'
+            }, '-=0.1');
+        } else {
+            setTimeout(() => {
+                loader.style.transform = 'translateY(-100%)';
+                setTimeout(() => { loader.style.display = 'none'; }, 800);
+            }, 1000);
+        }
+    }
 
-modalBtns.forEach((mb, i) => {
-  mb.addEventListener("click", () => {
-    modal(i);
-  });
-});
+    // Trigger loader removal
+    window.addEventListener('load', hideLoader);
+    setTimeout(hideLoader, 2000); // Fallback
 
-modalClose.forEach((mc) => {
-  mc.addEventListener("click", () => {
-    modalViews.forEach((mv) => {
-      mv.classList.remove("active-modal");
+    /*=============== SCROLL PROGRESS BAR ===============*/
+    const scrollProgressBar = document.getElementById('scroll-progress');
+    
+    function updateScrollProgress() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        if (scrollProgressBar) {
+            scrollProgressBar.style.width = progress + '%';
+        }
+    }
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+    /*=============== STICKY HEADER & SCROLLUP ===============*/
+    const header = document.getElementById('header');
+    const scrollUp = document.getElementById('scroll-up');
+
+    function handleScrollEffects() {
+        const scrollY = window.pageYOffset;
+
+        // Sticky Header
+        if (header) {
+            if (scrollY >= 50) {
+                header.classList.add('scroll-header');
+            } else {
+                header.classList.remove('scroll-header');
+            }
+        }
+
+        // Show/Hide Scroll-Up Button
+        if (scrollUp) {
+            if (scrollY >= 350) {
+                scrollUp.classList.add('show-scroll');
+            } else {
+                scrollUp.classList.remove('show-scroll');
+            }
+        }
+    }
+    window.addEventListener('scroll', handleScrollEffects, { passive: true });
+
+    /*=============== 3D TILT ENGINE FOR CARDS & AVATAR ===============*/
+    const tiltElements = document.querySelectorAll('[data-tilt]');
+
+    tiltElements.forEach(el => {
+        let bounds;
+
+        function updateBounds() {
+            bounds = el.getBoundingClientRect();
+        }
+
+        function handleMouseMove(e) {
+            if (!bounds) updateBounds();
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            const leftX = mouseX - bounds.x;
+            const topY = mouseY - bounds.y;
+            const center = {
+                x: leftX - bounds.width / 2,
+                y: topY - bounds.height / 2
+            };
+
+            const maxTilt = el.id === 'hero-3d-stage' ? 14 : 9;
+            const rotateX = (-center.y / (bounds.height / 2)) * maxTilt;
+            const rotateY = (center.x / (bounds.width / 2)) * maxTilt;
+
+            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        }
+
+        function handleMouseLeave() {
+            el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+
+        el.addEventListener('mouseenter', updateBounds);
+        el.addEventListener('mousemove', handleMouseMove);
+        el.addEventListener('mouseleave', handleMouseLeave);
     });
-  });
-});
 
-/*=============== QUALIFICATION TABS ===============*/
-const tabs = document.querySelectorAll('[data-target]'),
-  tabContents = document.querySelectorAll('[data-content]');
+    /*=============== TYPED.JS INITIALIZATION ===============*/
+    const roleElement = document.querySelector('.role');
+    if (roleElement && typeof Typed !== 'undefined') {
+        new Typed('.role', {
+            strings: [
+                'Full-Stack Developer',
+                'UI/UX Designer',
+                'Frontend Specialist',
+                'Software Engineer'
+            ],
+            typeSpeed: 60,
+            backSpeed: 40,
+            backDelay: 1800,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+    }
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    const target = document.querySelector(tab.dataset.target);
-
-    tabContents.forEach(tabContent => {
-      tabContent.classList.remove('qualification__active');
-    });
-    target.classList.add('qualification__active');
+    /*=============== QUALIFICATION TABS ===============*/
+    const tabs = document.querySelectorAll('.qualification__button');
+    const tabContents = document.querySelectorAll('.qualification__content');
 
     tabs.forEach(tab => {
-      tab.classList.remove('qualification__active');
+        tab.addEventListener('click', () => {
+            const target = document.querySelector(tab.dataset.target);
+
+            tabContents.forEach(content => {
+                content.classList.remove('qualification__active');
+            });
+            if (target) {
+                target.classList.add('qualification__active');
+            }
+
+            tabs.forEach(t => {
+                t.classList.remove('qualification__active');
+            });
+            tab.classList.add('qualification__active');
+        });
     });
-    tab.classList.add('qualification__active');
-  });
-});
 
+    /*=============== SERVICES MODALS ===============*/
+    const modalViews = document.querySelectorAll('.services__modal');
+    const modalBtns = document.querySelectorAll('.services__button');
+    const modalCloses = document.querySelectorAll('.services__modal-close');
 
-/*=============== MIXITUP FILTER PORTFOLIO ===============*/
+    modalBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            if (modalViews[index]) {
+                modalViews[index].classList.add('active-modal');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
 
-let mixer = mixitup(".work__container", {
-  selectors: {
-    target: ".work__card",
-  },
-  animation: {
-    duration: 300,
-  },
-});
+    modalCloses.forEach(close => {
+        close.addEventListener('click', () => {
+            modalViews.forEach(modal => {
+                modal.classList.remove('active-modal');
+            });
+            document.body.style.overflow = '';
+        });
+    });
 
-/* Link active work */
-const workLinks = document.querySelectorAll(".work__item");
+    // Close modal on backdrop click
+    modalViews.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active-modal');
+                document.body.style.overflow = '';
+            }
+        });
+    });
 
-function activeWork(workLink) {
-  workLinks.forEach((wl) => {
-    wl.classList.remove("active-work");
-  });
-  workLink.classList.add("active-work");
-}
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            modalViews.forEach(modal => {
+                modal.classList.remove('active-modal');
+            });
+            document.body.style.overflow = '';
+        }
+    });
 
-workLinks.forEach((wl) => {
-  wl.addEventListener("click", () => {
-    activeWork(wl);
-  });
-});
-
-/*=============== SWIPER TESTIMONIAL ===============*/
-
-let swiperTestimonial = new Swiper(".testimonial__container", {
-  spaceBetween: 24,
-  loop: true,
-  grabCursor: true,
-
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-
-  breakpoints: {
-    576: {
-      slidesPerView: 2,
-    },
-    768: {
-      slidesPerView: 2,
-      spaceBetween: 48,
-    },
-  },
-});
-
-/*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
-
-const sections = document.querySelectorAll("section[id]");
-
-function scrollActive() {
-  const scrollY = window.pageYOffset;
-
-  sections.forEach((current) => {
-    const sectionHeight = current.offsetHeight,
-      sectionTop = current.offsetTop - 58,
-      sectionId = current.getAttribute("id");
-
-    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-      document
-        .querySelector(".nav__menu a[href*=" + sectionId + "]")
-        .classList.add("active-link");
-    } else {
-      document
-        .querySelector(".nav__menu a[href*=" + sectionId + "]")
-        .classList.remove("active-link");
+    /*=============== MIXITUP FILTER PORTFOLIO ===============*/
+    const workContainer = document.querySelector('.work__container');
+    if (workContainer && typeof mixitup !== 'undefined') {
+        mixitup(workContainer, {
+            selectors: {
+                target: '.work__card'
+            },
+            animation: {
+                duration: 350,
+                effects: 'fade scale(0.95)',
+                easing: 'ease'
+            }
+        });
     }
-  });
-}
-window.addEventListener("scroll", scrollActive);
 
-/*=============== LIGHT DARK THEME ===============*/
-const themeButton = document.getElementById("theme-button");
-const lightTheme = "light-theme";
-const iconTheme = "bx-sun";
+    // Active filter button state
+    const filterBtns = document.querySelectorAll('.work__item');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active-work'));
+            btn.classList.add('active-work');
+        });
+    });
 
-// Previously selected topic (if user selected)
-const selectedTheme = localStorage.getItem("selected-theme");
-const selectedIcon = localStorage.getItem("selected-icon");
+    /*=============== SWIPER TESTIMONIAL ===============*/
+    if (typeof Swiper !== 'undefined') {
+        new Swiper('.testimonial__container', {
+            spaceBetween: 24,
+            loop: true,
+            grabCursor: true,
+            autoplay: {
+                delay: 4500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                576: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 28,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 32,
+                }
+            }
+        });
+    }
 
-// We obtain the current theme that the interface has by validating the light-theme class
-const getCurrentTheme = () =>
-  document.body.classList.contains(lightTheme) ? "dark" : "light";
-const getCurrentIcon = () =>
-  themeButton.classList.contains(iconTheme) ? "bx bx-moon" : "bx bx-sun";
+    /*=============== SCROLL ACTIVE LINK INDICATOR ===============*/
+    const sections = document.querySelectorAll('section[id]');
 
-// We validate if the user previously chose a topic
-if (selectedTheme) {
-  // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the light
-  document.body.classList[selectedTheme === "dark" ? "add" : "remove"](
-    lightTheme
-  );
-  themeButton.classList[selectedIcon === "bx bx-moon" ? "add" : "remove"](
-    iconTheme
-  );
-}
+    function updateActiveNav() {
+        const scrollY = window.pageYOffset;
 
-// Activate / deactivate the theme manually with the button
-themeButton.addEventListener("click", () => {
-  // Add or remove the light / icon theme
-  document.body.classList.toggle(lightTheme);
-  themeButton.classList.toggle(iconTheme);
-  // We save the theme and the current icon that the user chose
-  localStorage.setItem("selected-theme", getCurrentTheme());
-  localStorage.setItem("selected-icon", getCurrentIcon());
-});
+        sections.forEach(current => {
+            const sectionHeight = current.offsetHeight;
+            const sectionTop = current.offsetTop - 120;
+            const sectionId = current.getAttribute('id');
 
-/*=============== SCROLL REVEAL ANIMATION ===============*/
-const sr = ScrollReveal({
-  origin: "top",
-  distance: "60px",
-  duration: 2500,
-  delay: 400,
-  reset: true,
-});
+            const mobileLink = document.querySelector(`.nav__menu a[href*="${sectionId}"]`);
+            const desktopLink = document.querySelector(`.nav__menu-desktop a[href*="${sectionId}"]`);
 
-sr.reveal(`.nav__menu`, {
-  delay: 100,
-  scale: 0.1,
-  origin: "bottom",
-  distance: "300px",
-});
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                if (mobileLink) mobileLink.classList.add('active-link');
+                if (desktopLink) desktopLink.classList.add('active-link');
+            } else {
+                if (mobileLink) mobileLink.classList.remove('active-link');
+                if (desktopLink) desktopLink.classList.remove('active-link');
+            }
+        });
+    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
 
-sr.reveal(`.home__data`);
-sr.reveal(`.home__handle`, {
-  delay: 100,
-});
+    /*=============== LIGHT / DARK THEME TOGGLE ===============*/
+    const themeButton = document.getElementById('theme-button');
+    const lightThemeClass = 'light-theme';
+    const moonIcon = 'bx-moon';
+    const sunIcon = 'bx-sun';
 
-sr.reveal(`.home__social, .home__scroll`, {
-  delay: 100,
-  origin: "bottom",
-});
+    const savedTheme = localStorage.getItem('keerthi-theme');
+    const themeIcon = themeButton ? themeButton.querySelector('i') : null;
 
-sr.reveal(`.about__img`, {
-  delay: 100,
-  origin: "left",
-  scale: 0.9,
-  distance: "30px",
-});
+    if (savedTheme === 'light') {
+        document.body.classList.add(lightThemeClass);
+        if (themeIcon) {
+            themeIcon.classList.remove(moonIcon);
+            themeIcon.classList.add(sunIcon);
+        }
+    }
 
-sr.reveal(`.about__data, .about__description, .about__button-contact`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "right",
-  distance: "30px",
-});
+    if (themeButton) {
+        themeButton.addEventListener('click', () => {
+            document.body.classList.toggle(lightThemeClass);
+            const isLight = document.body.classList.contains(lightThemeClass);
 
-sr.reveal(`.skills__content`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "bottom",
-  distance: "30px",
-});
+            if (themeIcon) {
+                if (isLight) {
+                    themeIcon.classList.remove(moonIcon);
+                    themeIcon.classList.add(sunIcon);
+                } else {
+                    themeIcon.classList.remove(sunIcon);
+                    themeIcon.classList.add(moonIcon);
+                }
+            }
 
-sr.reveal(`.services__title, services__button`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "top",
-  distance: "30px",
-});
+            localStorage.setItem('keerthi-theme', isLight ? 'light' : 'dark');
+        });
+    }
 
-sr.reveal(`.work__card`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "bottom",
-  distance: "30px",
-});
+    /*=============== SCROLLREVEAL ANIMATIONS (FORWARD & BACKWARD) ===============*/
+    if (typeof ScrollReveal !== 'undefined') {
+        const sr = ScrollReveal({
+            origin: 'bottom',
+            distance: '35px',
+            duration: 800,
+            delay: 100,
+            reset: true, // Animates on both forward (down) and backward (up) scrolling
+            easing: 'cubic-bezier(0.5, 0, 0, 1)'
+        });
 
-sr.reveal(`.testimonial__container`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "bottom",
-  distance: "30px",
-});
+        // Section Headers
+        sr.reveal('.section__header', { origin: 'top', distance: '30px' });
 
-sr.reveal(`.contact__info, .contact__title-info`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "left",
-  distance: "30px",
-});
+        // Home Section
+        sr.reveal('.home__badge, .home__tagline, .home__name, .home__role-wrapper', { interval: 80 });
+        sr.reveal('.home__description', { delay: 150 });
+        sr.reveal('.home__buttons', { delay: 200 });
+        sr.reveal('.home__social', { delay: 250 });
+        sr.reveal('.home__metrics', { delay: 300 });
+        sr.reveal('.home__visual', { origin: 'top', delay: 150 });
 
-sr.reveal(`.contact__form, .contact__title-form`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "right",
-  distance: "30px",
-});
+        // About Section
+        sr.reveal('.about__visual', { origin: 'left', distance: '45px' });
+        sr.reveal('.about__data', { origin: 'right', distance: '45px' });
 
-sr.reveal(`.footer, footer__container`, {
-  delay: 100,
-  scale: 0.9,
-  origin: "bottom",
-  distance: "30px",
-});
+        // Skills Section
+        sr.reveal('.skills__card', { interval: 100, distance: '35px' });
 
-const typed = new Typed(".role", {
-  // Strings: ['Front-end Developer','Web Designer','Full-Stack Developer'],
-  strings: ['UI/UX Designer', 'Web Developer', 'Full-Stack Developer'],
-  typeSpeed: 100,
-  backSpeed: 60,
-  backDelay: 2000,
-  loop: true,
+        // Qualification / Journey
+        sr.reveal('.qualification__tabs', { origin: 'top', distance: '25px' });
+        sr.reveal('.timeline__item', { interval: 90, distance: '30px' });
+
+        // Services Section
+        sr.reveal('.services__card', { interval: 100, distance: '35px' });
+
+        // Work / Projects Section
+        sr.reveal('.work__filters', { origin: 'top', distance: '25px' });
+        sr.reveal('.work__card', { interval: 90, distance: '35px' });
+
+        // Testimonials Section
+        sr.reveal('.testimonial__container', { distance: '35px' });
+
+        // Contact Section
+        sr.reveal('.contact__content:first-child', { origin: 'left', distance: '45px' });
+        sr.reveal('.contact__content:last-child', { origin: 'right', distance: '45px' });
+        sr.reveal('.contact__card', { interval: 90, distance: '30px' });
+
+        // Footer Section
+        sr.reveal('.footer__container', { origin: 'bottom', distance: '30px' });
+    }
 });
