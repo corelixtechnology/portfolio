@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { SelectedWorks } from './components/SelectedWorks';
-import { SkillsJourney } from './components/SkillsJourney';
-import { Journal } from './components/Journal';
-import { Explorations } from './components/Explorations';
-import { Stats } from './components/Stats';
-import { ContactFooter } from './components/ContactFooter';
+import { AboutMe } from './components/AboutMe';
+import { SkillsPedestals } from './components/SkillsPedestals';
+import { FeaturedProjects } from './components/FeaturedProjects';
+import { ExperienceServices } from './components/ExperienceServices';
+import { ContactSection } from './components/ContactSection';
 import { ResumeModal } from './components/ResumeModal';
 
 export function App() {
@@ -24,35 +23,32 @@ export function App() {
   }, [isLoading]);
 
   return (
-    <div className="relative min-h-screen bg-bg text-text-primary selection:bg-white/20 selection:text-white">
-      {/* Section 1: Loading Screen */}
+    <div className="relative min-h-screen bg-[#07080d] text-white selection:bg-purple-500 selection:text-white font-body">
+      {/* 1. Loading Screen */}
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
       {/* Main Page Content */}
       <div className={`transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Fixed Navbar */}
-        <Navbar onOpenResume={() => setIsResumeOpen(true)} />
+        <Navbar onOpenTalk={() => setIsResumeOpen(false)} />
 
-        {/* Section 2: Hero */}
-        <Hero />
+        {/* Section 1: Hero */}
+        <Hero onOpenResume={() => setIsResumeOpen(true)} />
 
-        {/* Section 3: Selected Works */}
-        <SelectedWorks />
+        {/* Section 2: About Me (with Real Photo) */}
+        <AboutMe onOpenResume={() => setIsResumeOpen(true)} />
 
-        {/* Section 3.5: Skills & Journey */}
-        <SkillsJourney />
+        {/* Section 3: Technologies I Work With (3D Pedestals) */}
+        <SkillsPedestals />
 
-        {/* Section 4: Journal */}
-        <Journal />
+        {/* Section 4: Featured Projects (Some Things I've Built) */}
+        <FeaturedProjects />
 
-        {/* Section 5: Explorations (Parallax Gallery) */}
-        <Explorations />
+        {/* Section 5: Experience & Services (My Journey + What I Can Do) */}
+        <ExperienceServices />
 
-        {/* Section 6: Stats */}
-        <Stats />
-
-        {/* Section 7: Contact / Footer */}
-        <ContactFooter />
+        {/* Section 6: Contact & Footer (Have a project in mind?) */}
+        <ContactSection />
 
         {/* Resume Modal */}
         <ResumeModal

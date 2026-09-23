@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowUpRight } from 'lucide-react';
-import { USER_INFO } from '../data/content';
+import { Menu, X, Rocket } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface NavbarProps {
-  onOpenResume?: () => void;
+  onOpenTalk?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenTalk }) => {
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [activeSection, setActiveSection] = useState<string>("Home");
-  const [logoHovered, setLogoHovered] = useState<boolean>(false);
+  const [activeSection, setActiveSection] = useState<string>("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "skills", label: "Skills" },
+    { id: "projects", label: "Projects" },
+    { id: "experience", label: "Experience" },
+    { id: "services", label: "Services" },
+    { id: "contact", label: "Contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
+      setScrolled(window.scrollY > 30);
 
-      const sections = [
-        { id: "home", name: "Home" },
-        { id: "work", name: "Work" },
-        { id: "skills", name: "Skills" },
-        { id: "journal", name: "Journal" },
-        { id: "explorations", name: "Explorations" },
-        { id: "contact", name: "Contact" }
-      ];
-
+      const sections = ["home", "about", "skills", "projects", "experience", "services", "contact"];
       const scrollPosition = window.scrollY + 200;
+
       for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id);
+        const el = document.getElementById(sections[i]);
         if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i].name);
+          setActiveSection(sections[i]);
           break;
         }
       }
@@ -38,9 +41,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string, name: string) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    setActiveSection(name);
+    setActiveSection(id);
+    setMobileMenuOpen(false);
     const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
@@ -48,119 +52,144 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 md:pt-6 px-4 pointer-events-none transition-all duration-300">
-      <nav
-        className={`pointer-events-auto inline-flex items-center gap-1 sm:gap-2 rounded-full backdrop-blur-md border border-white/10 bg-surface/90 px-2 py-2 transition-all duration-300 ${
-          scrolled ? "shadow-lg shadow-black/40 border-white/15 bg-surface/95 scale-[0.98]" : ""
-        }`}
-      >
-        {/* 1. Logo: 9x9 circle with accent gradient border */}
-        <a
-          href="#home"
-          onClick={(e) => scrollToSection(e, "home", "Home")}
-          onMouseEnter={() => setLogoHovered(true)}
-          onMouseLeave={() => setLogoHovered(false)}
-          className="relative w-9 h-9 rounded-full p-[2px] transition-transform duration-300 hover:scale-110 flex items-center justify-center group focus:outline-none"
-          title={`${USER_INFO.name} Portfolio`}
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-4 px-4 sm:px-8 pointer-events-none transition-all duration-300">
+        <nav
+          className={`pointer-events-auto w-full max-w-[1300px] flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full transition-all duration-300 ${
+            scrolled
+              ? "bg-[#07080d]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+              : "bg-transparent border border-transparent"
+          }`}
         >
-          {/* Gradient Border (reverses direction on hover) */}
-          <div
-            className="absolute inset-0 rounded-full transition-all duration-500"
-            style={{
-              background: logoHovered
-                ? "linear-gradient(270deg, #89AACC 0%, #4E85BF 100%)"
-                : "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-            }}
-          />
-          {/* Inner circle */}
-          <div className="relative w-full h-full rounded-full bg-bg flex items-center justify-center select-none">
-            <span className="font-display italic text-[13px] font-bold text-text-primary tracking-tight group-hover:text-white transition-colors">
-              {USER_INFO.initials}
-            </span>
-          </div>
-        </a>
-
-        {/* 2. Divider (hidden on mobile) */}
-        <div className="w-px h-5 bg-stroke mx-1 hidden sm:block" />
-
-        {/* 3. Nav links: ["Home", "Work", "Skills", "Resume"] */}
-        <div className="flex items-center gap-1">
+          {/* 1. Left: Glowing Monogram KV Logo */}
           <a
             href="#home"
-            onClick={(e) => scrollToSection(e, "home", "Home")}
-            className={`text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-medium transition-all duration-200 ${
-              activeSection === "Home"
-                ? "text-text-primary bg-stroke/50 shadow-sm"
-                : "text-muted hover:text-text-primary hover:bg-stroke/40"
-            }`}
+            onClick={(e) => scrollToSection(e, "home")}
+            className="flex items-center gap-2 group focus:outline-none"
           >
-            Home
+            <div className="relative flex items-center justify-center font-extrabold text-2xl tracking-tighter text-white font-syne">
+              <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-500 bg-clip-text text-transparent group-hover:brightness-125 transition-all">
+                KV
+              </span>
+              <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
+            </div>
           </a>
 
-          <a
-            href="#work"
-            onClick={(e) => scrollToSection(e, "work", "Work")}
-            className={`text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-medium transition-all duration-200 ${
-              activeSection === "Work"
-                ? "text-text-primary bg-stroke/50 shadow-sm"
-                : "text-muted hover:text-text-primary hover:bg-stroke/40"
-            }`}
+          {/* 2. Center: Sleek Capsule Navigation (Desktop) */}
+          <div className="hidden lg:flex items-center gap-1 bg-[#0f111c]/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-inner">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  onClick={(e) => scrollToSection(e, link.id)}
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 ${
+                    isActive
+                      ? "text-white bg-[#2e1d52]/90 border border-purple-500/40 shadow-[0_0_15px_rgba(147,51,234,0.35)]"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* 3. Right: "Let's Talk 🚀" Glowing Pill CTA */}
+          <div className="hidden sm:flex items-center gap-3">
+            <a
+              href="#contact"
+              onClick={(e) => {
+                scrollToSection(e, "contact");
+                if (onOpenTalk) onOpenTalk();
+              }}
+              className="relative group inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold tracking-wide text-white bg-gradient-to-r from-[#3b82f6] to-[#7c3aed] hover:from-[#2563eb] hover:to-[#6d28d9] shadow-[0_0_20px_rgba(124,58,237,0.45)] hover:shadow-[0_0_28px_rgba(124,58,237,0.7)] transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              <span>Let's Talk</span>
+              <Rocket className="w-3.5 h-3.5 text-cyan-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex lg:hidden items-center gap-2">
+            <a
+              href="#contact"
+              onClick={(e) => scrollToSection(e, "contact")}
+              className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+            >
+              Let's Talk
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white active:scale-95 transition-all"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Drawer Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-[#07080d]/95 backdrop-blur-2xl lg:hidden flex flex-col justify-between p-6 pt-24"
+            onClick={() => setMobileMenuOpen(false)}
           >
-            Work
-          </a>
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="flex flex-col gap-2 max-w-sm mx-auto w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-[11px] uppercase tracking-[0.25em] text-cyan-400 font-bold px-3 mb-2">
+                Navigation
+              </div>
 
-          <a
-            href="#skills"
-            onClick={(e) => scrollToSection(e, "skills", "Skills")}
-            className={`text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-medium transition-all duration-200 ${
-              activeSection === "Skills"
-                ? "text-text-primary bg-stroke/50 shadow-sm"
-                : "text-muted hover:text-text-primary hover:bg-stroke/40"
-            }`}
-          >
-            Skills
-          </a>
+              <div className="flex flex-col gap-1.5 bg-[#0f111c] border border-white/10 rounded-3xl p-3 shadow-2xl">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={`#${link.id}`}
+                    onClick={(e) => scrollToSection(e, link.id)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition-all ${
+                      activeSection === link.id
+                        ? "bg-purple-600/30 text-white border border-purple-500/40"
+                        : "text-white/70 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                  </a>
+                ))}
+              </div>
 
-          {/* Resume link/modal button */}
-          <button
-            type="button"
-            onClick={() => {
-              if (onOpenResume) {
-                onOpenResume();
-              } else {
-                const el = document.getElementById("contact");
-                el?.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
-            className="text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 font-medium text-muted hover:text-text-primary hover:bg-stroke/40 transition-all duration-200"
-          >
-            Resume
-          </button>
-        </div>
+              <div className="mt-4">
+                <a
+                  href="#contact"
+                  onClick={(e) => scrollToSection(e, "contact")}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-xs tracking-wide shadow-lg shadow-purple-600/30"
+                >
+                  <span>Let's Talk</span>
+                  <Rocket className="w-4 h-4" />
+                </a>
+              </div>
+            </motion.div>
 
-        {/* 4. Divider */}
-        <div className="w-px h-5 bg-stroke mx-1" />
-
-        {/* 5. "Say hi" button */}
-        <a
-          href="#contact"
-          onClick={(e) => scrollToSection(e, "contact", "Contact")}
-          className="relative group inline-flex items-center text-xs sm:text-sm rounded-full font-medium focus:outline-none"
-        >
-          {/* Accent gradient border on hover */}
-          <span
-            className="absolute -inset-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{
-              background: "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-            }}
-          />
-          {/* Inner content */}
-          <span className="relative z-10 inline-flex items-center gap-1.5 bg-surface/90 hover:bg-surface rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-text-primary transition-colors backdrop-blur-md">
-            <span>Say hi</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-muted group-hover:text-text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-          </span>
-        </a>
-      </nav>
-    </header>
+            <div className="text-center text-xs text-white/40 pb-4">
+              © {new Date().getFullYear()} Keerthivasan V. All rights reserved.
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

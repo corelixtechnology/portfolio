@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import gsap from 'gsap';
-import { ArrowUp, ArrowUpRight, Mail, Phone, MessageSquare, Send, CheckCircle2 } from 'lucide-react';
+import { ArrowUp, ArrowUpRight, Mail, Phone, MessageSquare, Send, CheckCircle2, Copy, Check } from 'lucide-react';
 import { HLS_STREAM_URL, SOCIAL_LINKS, USER_INFO } from '../data/content';
 
 export const ContactFooter: React.FC = () => {
@@ -9,20 +9,35 @@ export const ContactFooter: React.FC = () => {
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [selectedServices, setSelectedServices] = useState<string[]>(['UI/UX Design', 'Full-Stack App']);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
-  // Initialize HLS for Footer Background (flipped vertically)
+  const serviceOptions = [
+    "UI/UX Design",
+    "Full-Stack App",
+    "Frontend Engineering",
+    "Spring Boot & APIs",
+    "Hospital System",
+    "Design System"
+  ];
+
+  const toggleService = (service: string) => {
+    if (selectedServices.includes(service)) {
+      setSelectedServices(selectedServices.filter((s) => s !== service));
+    } else {
+      setSelectedServices([...selectedServices, service]);
+    }
+  };
+
+  // Initialize HLS for Footer Background
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     let hls: Hls | null = null;
-
     if (Hls.isSupported()) {
-      hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-      });
+      hls = new Hls({ enableWorker: true, lowLatencyMode: true });
       hls.loadSource(HLS_STREAM_URL);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -36,22 +51,19 @@ export const ContactFooter: React.FC = () => {
     }
 
     return () => {
-      if (hls) {
-        hls.destroy();
-      }
+      if (hls) hls.destroy();
     };
   }, []);
 
   // GSAP Marquee Animation
   useEffect(() => {
     if (!marqueeRef.current) return;
-
     const marqueeTrack = marqueeRef.current.querySelector('.marquee-track');
     if (!marqueeTrack) return;
 
     const tween = gsap.to(marqueeTrack, {
       xPercent: -50,
-      duration: 40,
+      duration: 35,
       ease: "none",
       repeat: -1,
     });
@@ -60,6 +72,12 @@ export const ContactFooter: React.FC = () => {
       tween.kill();
     };
   }, []);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(USER_INFO.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,8 +94,8 @@ export const ContactFooter: React.FC = () => {
           access_key: USER_INFO.web3formsKey,
           name: formData.name,
           email: formData.email,
-          message: formData.message,
-          from_name: `${formData.name} (Portfolio Inquiry)`
+          message: `[Services: ${selectedServices.join(', ')}]\n\n${formData.message}`,
+          from_name: `${formData.name} (Tubik Portfolio Inquiry)`
         })
       });
 
@@ -97,14 +115,14 @@ export const ContactFooter: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const marqueeText = "BUILDING SCALABLE WEB EXPERIENCES • CRAFTING HIGH-PERFORMANCE APPS • ".repeat(6);
+  const marqueeText = "LET'S BUILD SOMETHING REMARKABLE • CRAFTING FULL-STACK EXCELLENCE • AVAILABLE FOR PROJECTS • ".repeat(6);
 
   return (
     <footer
       id="contact"
-      className="relative bg-bg pt-16 md:pt-24 pb-8 md:pb-12 overflow-hidden border-t border-stroke"
+      className="relative bg-[#09090c] pt-16 sm:pt-24 md:pt-32 pb-8 md:pb-12 overflow-hidden border-t border-white/10"
     >
-      {/* Background Video (Flipped Vertically scale-y-[-1] + Heavier overlay) */}
+      {/* Background Video with heavy obsidian overlay */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <video
           ref={videoRef}
@@ -112,204 +130,238 @@ export const ContactFooter: React.FC = () => {
           muted
           loop
           playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover scale-y-[-1] opacity-35"
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-bg to-transparent" />
+        <div className="absolute inset-0 bg-[#09090c]/90 backdrop-blur-[3px]" />
       </div>
 
-      {/* GSAP Marquee Banner */}
+      {/* Tubik Marquee Banner */}
       <div
         ref={marqueeRef}
-        className="relative z-10 w-full overflow-hidden whitespace-nowrap py-4 border-y border-stroke/40 bg-surface/50 backdrop-blur-md mb-16 select-none"
+        className="relative z-10 w-full overflow-hidden whitespace-nowrap py-3.5 sm:py-4 border-y border-white/10 bg-white/[0.02] backdrop-blur-md mb-12 sm:mb-20 select-none"
       >
-        <div className="marquee-track inline-flex items-center text-xs sm:text-sm font-medium tracking-[0.3em] uppercase text-muted/80">
-          <span className="pr-4">{marqueeText}</span>
-          <span className="pr-4">{marqueeText}</span>
+        <div className="marquee-track inline-flex items-center text-xs sm:text-sm font-extrabold tracking-[0.25em] sm:tracking-[0.3em] uppercase text-white/40">
+          <span className="pr-6">{marqueeText}</span>
+          <span className="pr-6">{marqueeText}</span>
         </div>
       </div>
 
       {/* Main Contact Grid */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 mb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Heading & Quick Contact Cards */}
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 mb-16 sm:mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* Left Column: Tubik Display Title & Contact Cards */}
           <div className="lg:col-span-5 flex flex-col">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-8 h-px bg-stroke" />
-              <span className="text-xs text-muted uppercase tracking-[0.3em] font-medium">
-                Get In Touch
+            <div className="flex items-center gap-2.5 mb-3">
+              <span className="w-6 h-px bg-[#C9C1FF]" />
+              <span className="text-[11px] uppercase tracking-[0.25em] font-bold text-[#C9C1FF]">
+                START A PROJECT
               </span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-text-primary mb-5">
-              Let&apos;s build <span className="font-display italic text-5xl sm:text-6xl md:text-7xl">together</span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-syne font-extrabold tracking-tight text-white mb-4 sm:mb-6">
+              Have a project <span className="font-serif italic font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-[#C9C1FF]">in mind?</span>
             </h2>
 
-            <p className="text-sm md:text-base text-muted mb-8 leading-relaxed">
-              Have a project in mind, an engineering role, or a design inquiry? Let&apos;s start a conversation.
+            <p className="text-sm sm:text-base text-white/60 mb-8 sm:mb-10 leading-relaxed font-normal">
+              Whether you need end-to-end full-stack web application development, a high-converting UI/UX redesign, or scalable backend systems, let's connect.
             </p>
 
-            {/* Quick Cards */}
-            <div className="flex flex-col gap-3.5">
-              {/* Email Card */}
-              <a
-                href={`mailto:${USER_INFO.email}`}
-                className="flex items-center justify-between p-4 rounded-2xl bg-surface/70 border border-stroke hover:border-white/20 transition-all group"
+            {/* Quick Contact Cards */}
+            <div className="flex flex-col gap-3">
+              {/* Direct Copy Email Card */}
+              <div
+                onClick={handleCopyEmail}
+                className="flex items-center justify-between p-4 rounded-2xl bg-[#14141d] border border-white/10 hover:border-white/30 transition-all cursor-pointer group active:scale-[0.99]"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-bg border border-stroke flex items-center justify-center text-sky-400">
+                <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#C9C1FF] shrink-0">
                     <Mail className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-muted font-medium block">
-                      Direct Email
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-white/40 block">
+                      Direct Email (Click to Copy)
                     </span>
-                    <span className="text-xs sm:text-sm text-text-primary group-hover:text-white font-mono">
+                    <span className="text-sm text-white font-mono block truncate">
                       {USER_INFO.email}
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-muted group-hover:text-text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+                <div className="px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-xs font-bold text-white flex items-center gap-1 shrink-0 ml-2">
+                  {copiedEmail ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-[#00F59B]" />
+                      <span className="text-[#00F59B]">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-white/60" />
+                      <span className="text-white/60">Copy</span>
+                    </>
+                  )}
+                </div>
+              </div>
 
               {/* WhatsApp Card */}
               <a
                 href={USER_INFO.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-4 rounded-2xl bg-surface/70 border border-stroke hover:border-white/20 transition-all group"
+                className="flex items-center justify-between p-4 rounded-2xl bg-[#14141d] border border-white/10 hover:border-white/30 transition-all group active:scale-[0.99]"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-bg border border-stroke flex items-center justify-center text-emerald-400">
+                <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#00F59B] shrink-0">
                     <MessageSquare className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-muted font-medium block">
-                      WhatsApp Quick Chat
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-white/40 block">
+                      WhatsApp Chat
                     </span>
-                    <span className="text-xs sm:text-sm text-text-primary group-hover:text-white font-mono">
+                    <span className="text-sm text-white font-mono block truncate">
                       {USER_INFO.phone}
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-muted group-hover:text-text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
               </a>
 
               {/* Phone Card */}
               <a
                 href={`tel:${USER_INFO.phone}`}
-                className="flex items-center justify-between p-4 rounded-2xl bg-surface/70 border border-stroke hover:border-white/20 transition-all group"
+                className="flex items-center justify-between p-4 rounded-2xl bg-[#14141d] border border-white/10 hover:border-white/30 transition-all group active:scale-[0.99]"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-bg border border-stroke flex items-center justify-center text-purple-400">
+                <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#C9C1FF] shrink-0">
                     <Phone className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-muted font-medium block">
-                      Direct Line
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-white/40 block">
+                      Direct Phone
                     </span>
-                    <span className="text-xs sm:text-sm text-text-primary group-hover:text-white font-mono">
+                    <span className="text-sm text-white font-mono block truncate">
                       {USER_INFO.phone}
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-muted group-hover:text-text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
               </a>
             </div>
           </div>
 
-          {/* Right Column: Web3Forms Contact Form */}
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-surface/60 border border-stroke backdrop-blur-md">
-            <h3 className="text-xl font-medium text-text-primary mb-2 flex items-center gap-2">
-              <span>Send a Message</span>
+          {/* Right Column: Tubik Interactive Inquiry Form */}
+          <div className="lg:col-span-7 p-6 sm:p-10 rounded-[32px] bg-[#14141d] border border-white/10 shadow-2xl">
+            <h3 className="text-xl sm:text-2xl font-syne font-bold text-white mb-2">
+              Send an Inquiry
             </h3>
-            <p className="text-xs sm:text-sm text-muted mb-6">
-              Fill in your details below and your message will be dispatched directly to my inbox.
+            <p className="text-xs sm:text-sm text-white/50 mb-6 font-normal">
+              Select the capabilities you require and describe your project goals.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Service Chips */}
+            <div className="mb-6">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-white/50 mb-2.5">
+                What are you looking to build?
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {serviceOptions.map((srv) => {
+                  const isSelected = selectedServices.includes(srv);
+                  return (
+                    <button
+                      key={srv}
+                      type="button"
+                      onClick={() => toggleService(srv)}
+                      className={`px-3.5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                        isSelected
+                          ? "bg-[#6344f5] text-white border border-[#6344f5] shadow-lg shadow-[#6344f5]/30"
+                          : "bg-white/[0.03] text-white/60 border border-white/10 hover:border-white/20 hover:text-white"
+                      }`}
+                    >
+                      {srv}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
               <div>
-                <label htmlFor="form-name" className="block text-xs font-medium text-muted uppercase tracking-wider mb-2">
+                <label htmlFor="name" className="block text-[11px] font-bold uppercase tracking-wider text-white/50 mb-2">
                   Your Name
                 </label>
                 <input
-                  id="form-name"
+                  id="name"
                   type="text"
                   required
-                  placeholder="e.g. Alex Johnson"
+                  placeholder="e.g. Elena Rostova"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-2xl bg-bg border border-stroke focus:border-sky-400 focus:outline-none text-sm text-text-primary placeholder:text-muted/50 transition-colors"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-[#09090c] border border-white/10 focus:border-[#6344f5] focus:ring-1 focus:ring-[#6344f5] text-white placeholder:text-white/30 text-sm transition-all"
                 />
               </div>
 
               <div>
-                <label htmlFor="form-email" className="block text-xs font-medium text-muted uppercase tracking-wider mb-2">
+                <label htmlFor="email" className="block text-[11px] font-bold uppercase tracking-wider text-white/50 mb-2">
                   Email Address
                 </label>
                 <input
-                  id="form-email"
+                  id="email"
                   type="email"
                   required
-                  placeholder="e.g. alex@example.com"
+                  placeholder="e.g. elena@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-2xl bg-bg border border-stroke focus:border-sky-400 focus:outline-none text-sm text-text-primary placeholder:text-muted/50 transition-colors"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-[#09090c] border border-white/10 focus:border-[#6344f5] focus:ring-1 focus:ring-[#6344f5] text-white placeholder:text-white/30 text-sm transition-all"
                 />
               </div>
 
               <div>
-                <label htmlFor="form-message" className="block text-xs font-medium text-muted uppercase tracking-wider mb-2">
-                  Your Message
+                <label htmlFor="message" className="block text-[11px] font-bold uppercase tracking-wider text-white/50 mb-2">
+                  Project Details
                 </label>
                 <textarea
-                  id="form-message"
+                  id="message"
                   required
                   rows={4}
-                  placeholder="Describe your project, timeline, or inquiry..."
+                  placeholder="Tell me about your product requirements, timeline, or design challenges..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-3 rounded-2xl bg-bg border border-stroke focus:border-sky-400 focus:outline-none text-sm text-text-primary placeholder:text-muted/50 transition-colors resize-none"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-[#09090c] border border-white/10 focus:border-[#6344f5] focus:ring-1 focus:ring-[#6344f5] text-white placeholder:text-white/30 text-sm transition-all resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={formStatus === 'submitting'}
-                className="w-full relative group rounded-full text-sm font-medium py-3.5 transition-all duration-300 hover:scale-[1.01] focus:outline-none"
+                className="w-full group relative inline-flex items-center justify-center rounded-full bg-white hover:bg-[#C9C1FF] text-[#09090c] py-4 px-8 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-xl shadow-white/5"
               >
-                <span
-                  className="absolute -inset-[1px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-                  }}
-                />
-                <span className="relative z-10 w-full inline-flex items-center justify-center gap-2 rounded-full bg-text-primary text-bg group-hover:bg-bg group-hover:text-text-primary py-3.5 px-6 transition-colors font-semibold">
-                  {formStatus === 'submitting' ? (
-                    <span>Sending Message...</span>
-                  ) : formStatus === 'success' ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                      <span>Message Sent Successfully!</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Send Message</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </span>
+                {formStatus === 'submitting' ? (
+                  <span>Sending Your Request...</span>
+                ) : formStatus === 'success' ? (
+                  <div className="flex items-center gap-2 text-[#09090c]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Inquiry Sent Successfully!</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="roll-link">
+                      <div className="roll-link-inner">
+                        <span className="roll-link-line">Send Project Inquiry</span>
+                        <span className="roll-link-line text-[#09090c]">Send Project Inquiry</span>
+                      </div>
+                    </div>
+                    <Send className="w-4 h-4" />
+                  </div>
+                )}
               </button>
 
               {formStatus === 'success' && (
-                <p className="text-xs text-emerald-400 text-center mt-2">
-                  Thank you! Your message has been delivered. I will respond promptly.
+                <p className="text-xs text-[#00F59B] text-center mt-2 font-medium">
+                  Thank you! Your project request has been delivered directly to Keerthivasan.
                 </p>
               )}
 
               {formStatus === 'error' && (
-                <p className="text-xs text-rose-400 text-center mt-2">
-                  Failed to send message. Please reach out directly via email or WhatsApp.
+                <p className="text-xs text-rose-400 text-center mt-2 font-medium">
+                  Failed to send message. Please reach out directly via {USER_INFO.email}.
                 </p>
               )}
             </form>
@@ -317,42 +369,37 @@ export const ContactFooter: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer Bottom Bar */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 pt-8 border-t border-stroke/60 flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* Tubik Footer Bottom Bar */}
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Availability Badge */}
-        <div className="flex items-center gap-3 bg-surface/80 border border-stroke px-4 py-2 rounded-full">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <span className="text-xs font-medium text-text-primary/90">
-            Available for full-time & freelance projects
-          </span>
+        <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 text-xs font-bold uppercase tracking-wider text-white/80">
+          <span className="w-2 h-2 rounded-full bg-[#00F59B] animate-pulse" />
+          <span>Available for global client projects</span>
         </div>
 
         {/* Social Links */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted">
+        <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-7 text-xs font-bold uppercase tracking-wider text-white/50">
           {SOCIAL_LINKS.map((link) => (
             <a
               key={link.name}
               href={link.url}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-text-primary transition-colors py-1 flex items-center gap-1 group"
+              className="hover:text-white transition-colors flex items-center gap-1"
             >
               <span>{link.name}</span>
-              <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-200" />
+              <ArrowUpRight className="w-3 h-3 text-white/30" />
             </a>
           ))}
         </div>
 
         {/* Copyright & Scroll To Top */}
-        <div className="flex items-center gap-4 text-xs text-muted">
-          <span>© 2026 {USER_INFO.name}. All rights reserved.</span>
+        <div className="flex items-center gap-4 text-xs font-medium text-white/40">
+          <span>© 2026 {USER_INFO.name}.</span>
           <button
             type="button"
             onClick={scrollToTop}
-            className="w-8 h-8 rounded-full bg-surface border border-stroke hover:border-white/30 flex items-center justify-center text-muted hover:text-white transition-all"
+            className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/10 hover:bg-white hover:text-[#09090c] text-white flex items-center justify-center transition-all duration-300 active:scale-95"
             title="Scroll to top"
           >
             <ArrowUp className="w-4 h-4" />

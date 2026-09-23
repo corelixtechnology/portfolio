@@ -1,191 +1,197 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Hls from 'hls.js';
-import gsap from 'gsap';
-import { HERO_ROLES, HLS_STREAM_URL, USER_INFO } from '../data/content';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowUpRight, Download, Github, Linkedin, Instagram, Mail } from 'lucide-react';
+import { USER_INFO, SOCIAL_LINKS } from '../data/content';
+import { TechIcon } from './TechIcons';
 
-export const Hero: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [roleIndex, setRoleIndex] = useState<number>(0);
+interface HeroProps {
+  onOpenResume?: () => void;
+}
 
-  // Initialize HLS.js video stream
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    let hls: Hls | null = null;
-
-    if (Hls.isSupported()) {
-      hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-      });
-      hls.loadSource(HLS_STREAM_URL);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {});
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = HLS_STREAM_URL;
-      video.addEventListener('loadedmetadata', () => {
-        video.play().catch(() => {});
-      });
+export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
+  const getSocialIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'github':
+        return <Github className="w-4 h-4" />;
+      case 'linkedin':
+        return <Linkedin className="w-4 h-4" />;
+      case 'instagram':
+        return <Instagram className="w-4 h-4" />;
+      case 'mail':
+        return <Mail className="w-4 h-4" />;
+      default:
+        return <Mail className="w-4 h-4" />;
     }
-
-    return () => {
-      if (hls) {
-        hls.destroy();
-      }
-    };
-  }, []);
-
-  // Role cycler every 2s
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % HERO_ROLES.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // GSAP Entrance Timeline
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      tl.fromTo(
-        ".name-reveal",
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1.2, delay: 0.1 }
-      )
-      .fromTo(
-        ".blur-in",
-        { opacity: 0, filter: "blur(10px)", y: 20 },
-        { opacity: 1, filter: "blur(0px)", y: 0, duration: 1, stagger: 0.15 },
-        0.3
-      );
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const scrollToWorks = () => {
-    const el = document.getElementById("work");
-    el?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToContact = () => {
-    const el = document.getElementById("contact");
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
+  const floatingBadges = [
+    { name: "React", icon: "react", color: "#61DAFB", glow: "rgba(97, 218, 251, 0.5)", pos: "top-8 left-6 md:top-12 md:left-10", delay: 0 },
+    { name: "Node.js", icon: "node", color: "#68A063", glow: "rgba(104, 160, 99, 0.5)", pos: "top-4 right-10 md:top-8 md:right-16", delay: 1.2 },
+    { name: "JS", icon: "js", color: "#F7DF1E", glow: "rgba(247, 223, 30, 0.5)", pos: "top-1/3 left-0 md:top-2/5 md:-left-4", delay: 0.6 },
+    { name: "MongoDB", icon: "mongodb", color: "#47A248", glow: "rgba(71, 162, 72, 0.5)", pos: "top-1/4 right-0 md:top-1/3 md:-right-2", delay: 1.8 },
+    { name: "Bootstrap", icon: "bootstrap", color: "#7952B3", glow: "rgba(121, 82, 179, 0.5)", pos: "bottom-12 right-2 md:bottom-16 md:right-8", delay: 0.9 },
+  ];
 
   return (
     <section
       id="home"
-      ref={heroRef}
-      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg px-4 sm:px-6 pt-24 pb-16"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#07080d] pt-24 pb-16 px-4 sm:px-6 md:px-10 lg:px-16"
     >
-      {/* Background HLS Video */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover opacity-60"
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/25" />
-        {/* Subtle radial gradient focus */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(10,10,10,0.6)_100%)]" />
-        {/* Bottom fade to page bg */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg via-bg/80 to-transparent" />
-      </div>
+      {/* Ambient background glows */}
+      <div className="absolute top-1/4 left-1/5 w-[35vw] h-[35vw] max-w-[500px] max-h-[500px] rounded-full bg-[#6344f5]/15 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[35vw] h-[35vw] max-w-[450px] max-h-[450px] rounded-full bg-[#38bdf8]/12 blur-[140px] pointer-events-none" />
 
-      {/* Hero Content (Centered, z-10) */}
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
-        {/* Eyebrow */}
-        <div className="blur-in inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-muted uppercase tracking-[0.3em] mb-8 font-medium backdrop-blur-sm">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>{USER_INFO.eyebrow}</span>
-        </div>
+      {/* Main Container */}
+      <div className="relative z-10 max-w-[1300px] mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          
+          {/* Left Column: Typography & CTAs */}
+          <div className="lg:col-span-6 flex flex-col justify-center">
+            {/* Tag */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-xs font-bold tracking-[0.2em] text-[#38bdf8] uppercase mb-2 sm:mb-3"
+            >
+              HELLO, I'M
+            </motion.div>
 
-        {/* Name */}
-        <h1 className="name-reveal text-6xl md:text-8xl lg:text-9xl font-display italic leading-[0.9] tracking-tight text-text-primary mb-6 selection:text-white">
-          {USER_INFO.name}
-        </h1>
+            {/* Headline - refined and smaller font size */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="font-syne font-extrabold text-3xl sm:text-4xl md:text-[2.75rem] lg:text-[3.25rem] leading-[1.1] tracking-tight text-white mb-2"
+            >
+              {USER_INFO.name}
+            </motion.h1>
 
-        {/* Role line */}
-        <div className="blur-in text-lg sm:text-xl md:text-2xl text-text-primary/90 font-light mb-5 flex items-center justify-center flex-wrap gap-x-2">
-          <span>A dedicated</span>
-          <span
-            key={roleIndex}
-            className="font-display italic text-text-primary animate-role-fade-in inline-block text-xl sm:text-2xl md:text-3xl underline decoration-stroke underline-offset-4 decoration-1"
+            {/* Subheading */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="text-xl sm:text-2xl md:text-3xl font-syne font-bold text-white mb-5"
+            >
+              Full Stack{" "}
+              <span className="bg-gradient-to-r from-[#9333ea] via-[#a855f7] to-[#c084fc] bg-clip-text text-transparent">
+                Developer
+              </span>
+            </motion.h2>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-xs sm:text-sm md:text-base text-white/70 max-w-lg leading-relaxed mb-8"
+            >
+              {USER_INFO.heroDescription}
+            </motion.p>
+
+            {/* Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25 }}
+              className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-8 sm:mb-10"
+            >
+              <a
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#6366f1] via-[#7c3aed] to-[#9333ea] hover:from-[#4f46e5] hover:to-[#7e22ce] shadow-[0_0_25px_rgba(124,58,237,0.45)] hover:shadow-[0_0_35px_rgba(124,58,237,0.7)] transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <span>View My Work</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+
+              <a
+                href={USER_INFO.resumeUrl}
+                download="Keerthivasan_V_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onOpenResume}
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-full font-semibold text-xs sm:text-sm text-white/90 bg-[#141624]/80 hover:bg-[#1f2238] border border-white/15 hover:border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <span>Download CV</span>
+                <Download className="w-4 h-4" />
+              </a>
+            </motion.div>
+
+            {/* Connect With Me */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="flex flex-col gap-2.5"
+            >
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-white/50">
+                CONNECT WITH ME
+              </span>
+              <div className="flex items-center gap-3">
+                {SOCIAL_LINKS.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#121422] border border-white/10 hover:border-purple-500/60 flex items-center justify-center text-white/70 hover:text-white hover:bg-[#1a1d33] hover:shadow-[0_0_16px_rgba(147,51,234,0.35)] transition-all duration-300 hover:-translate-y-0.5"
+                    aria-label={link.name}
+                  >
+                    {getSocialIcon(link.icon)}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: 3D Developer Avatar with Floating Glow Badges */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2 }}
+            className="lg:col-span-6 relative flex items-center justify-center"
           >
-            {HERO_ROLES[roleIndex]}
-          </span>
-          <span>crafting digital systems.</span>
-        </div>
+            {/* Ambient circular back-glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/30 to-pink-600/20 rounded-full blur-3xl opacity-70 pointer-events-none" />
 
-        {/* Description */}
-        <p className="blur-in text-sm md:text-base text-muted max-w-lg mb-10 leading-relaxed">
-          {USER_INFO.bio}
-        </p>
+            <div className="relative w-full max-w-[520px] aspect-[4/3] sm:aspect-[4/3] rounded-3xl overflow-hidden bg-[#0e101c]/80 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md group">
+              {/* 3D Illustration Image */}
+              <img
+                src={USER_INFO.hero3dImage || "/assets/img/hero_3d.jpg"}
+                alt="Keerthivasan 3D Developer"
+                className="w-full h-full object-cover transform group-hover:scale-102 transition-transform duration-700"
+              />
 
-        {/* CTA Buttons */}
-        <div className="blur-in inline-flex flex-wrap items-center justify-center gap-4">
-          {/* 1. "Explore Projects": Solid button */}
-          <button
-            type="button"
-            onClick={scrollToWorks}
-            className="relative group rounded-full text-sm px-7 py-3.5 font-medium transition-all duration-300 hover:scale-105 focus:outline-none"
-          >
-            {/* Accent gradient ring on hover */}
-            <span
-              className="absolute -inset-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background: "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-              }}
-            />
-            {/* Button Surface */}
-            <span className="relative z-10 inline-block rounded-full bg-text-primary text-bg group-hover:bg-bg group-hover:text-text-primary px-7 py-3.5 -mx-7 -my-3.5 transition-colors duration-300 font-semibold">
-              Explore Projects
-            </span>
-          </button>
+              {/* Vignette border & inner glow */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07080d]/80 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 border border-white/10 rounded-3xl pointer-events-none" />
+            </div>
 
-          {/* 2. "Let's Connect": Outlined button */}
-          <button
-            type="button"
-            onClick={scrollToContact}
-            className="relative group rounded-full text-sm px-7 py-3.5 font-medium transition-all duration-300 hover:scale-105 focus:outline-none"
-          >
-            {/* Accent gradient border ring on hover */}
-            <span
-              className="absolute -inset-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background: "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-              }}
-            />
-            {/* Button Surface */}
-            <span className="relative z-10 inline-block rounded-full border-2 border-stroke bg-bg text-text-primary group-hover:border-transparent px-7 py-3.5 -mx-7 -my-3.5 transition-colors duration-300">
-              Let&apos;s Connect
-            </span>
-          </button>
-        </div>
-      </div>
+            {/* Floating 3D Tech Badges */}
+            {floatingBadges.map((badge) => (
+              <motion.div
+                key={badge.name}
+                animate={{
+                  y: [0, -8, 0],
+                  rotate: [0, 2, -2, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: badge.delay,
+                }}
+                className={`absolute ${badge.pos} z-20 hidden sm:flex items-center justify-center p-2.5 rounded-2xl bg-[#0e101d]/90 border border-white/20 backdrop-blur-md shadow-2xl transition-transform hover:scale-110`}
+                style={{
+                  boxShadow: `0 0 20px ${badge.glow}`,
+                }}
+              >
+                <TechIcon name={badge.icon} size={26} />
+              </motion.div>
+            ))}
+          </motion.div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 select-none pointer-events-none">
-        <span className="text-[10px] sm:text-xs text-muted uppercase tracking-[0.25em]">
-          SCROLL
-        </span>
-        <div className="w-px h-10 bg-stroke/70 relative overflow-hidden rounded-full">
-          <div
-            className="w-full h-1/2 bg-text-primary/90 animate-scroll-down rounded-full"
-            style={{
-              boxShadow: "0 0 6px rgba(255, 255, 255, 0.4)"
-            }}
-          />
         </div>
       </div>
     </section>

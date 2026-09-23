@@ -1,149 +1,246 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Play, X, ExternalLink } from 'lucide-react';
 import { PROJECTS } from '../data/content';
+import { Project } from '../types';
 
 export const SelectedWorks: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Extended project case taglines for Tubik feel
+  const projectTaglines: Record<string, string> = {
+    "hospital-portal": "Comprehensive medical workflows. Precision healthcare experience.",
+    "movie-explorer": "Curated cinema discovery. Real-time TMDB indexing.",
+    "travel-website": "Immersive tourism platform. Fluid destination booking.",
+    "ecommerce-store": "High-performance storefront. Seamless checkout architecture."
+  };
+
   return (
-    <section id="work" className="bg-bg py-16 md:py-24 relative z-20">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6"
-        >
-          <div>
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-8 h-px bg-stroke" />
-              <span className="text-xs text-muted uppercase tracking-[0.3em] font-medium">
-                Selected Work
-              </span>
+    <>
+      <section id="work" className="bg-[#09090c] py-16 sm:py-24 md:py-32 relative z-20 border-t border-white/10">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16">
+          {/* Tubik Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 md:mb-20 gap-6"
+          >
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="w-6 h-px bg-[#C9C1FF]" />
+                <span className="text-[11px] uppercase tracking-[0.25em] font-bold text-[#C9C1FF]">
+                  PORTFOLIO SHOWCASE
+                </span>
+              </div>
+
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-syne font-extrabold tracking-tight text-white">
+                Featured <span className="font-serif italic font-normal text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-[#C9C1FF]">work</span>
+              </h2>
             </div>
 
-            {/* Heading */}
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-text-primary">
-              Featured <span className="font-display italic text-5xl md:text-6xl lg:text-7xl">projects</span>
-            </h2>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-xs sm:text-sm text-white/60 max-w-md">
+              <p className="leading-relaxed">
+                Selected web engineering platforms, responsive portals, and interactive digital products crafted for maximum performance.
+              </p>
+            </div>
+          </motion.div>
 
-            {/* Subtext */}
-            <p className="text-sm md:text-base text-muted max-w-md mt-3">
-              A curated collection of web applications, hospital management portals, and client platforms built with React & modern stacks.
-            </p>
+          {/* Tubik 2-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
+            {PROJECTS.map((project, idx) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: idx * 0.12 }}
+                className="group flex flex-col cursor-pointer"
+              >
+                {/* Media Wrap with Rounded Corners & Shutter/Hover effect */}
+                <div
+                  onClick={() => setSelectedProject(project)}
+                  className="relative w-full aspect-[16/11] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-[#161622] border border-white/10 group-hover:border-white/30 transition-all duration-500 shadow-2xl mb-5 sm:mb-6"
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+
+                  {/* Gradient & Texture Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#09090c]/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  <div className="absolute inset-0 halftone-overlay opacity-20 pointer-events-none" />
+
+                  {/* Category Pill Tag (Top Left) */}
+                  <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10">
+                    <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white shadow-lg">
+                      {project.category}
+                    </span>
+                  </div>
+
+                  {/* Tubik Signature "Quick View" Play Button (Floating Bottom Right) */}
+                  <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-10">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProject(project);
+                      }}
+                      className="group/btn inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 hover:bg-white text-[#09090c] backdrop-blur-md transition-all duration-300 shadow-xl group-hover:scale-105 active:scale-95 text-xs font-bold uppercase tracking-wider"
+                    >
+                      {/* Double Triangle Play Icon */}
+                      <div className="relative w-3.5 h-3.5 flex items-center justify-center overflow-hidden">
+                        <Play className="w-3 h-3 fill-[#09090c] text-[#09090c] transition-transform duration-300 group-hover/btn:translate-x-0.5" />
+                      </div>
+                      <span>quick view</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Text Wrap (Tubik Typography) */}
+                <div className="flex items-start justify-between gap-4 px-1">
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-syne font-bold text-white tracking-tight group-hover:text-[#C9C1FF] transition-colors mb-1.5">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-white/50 leading-relaxed font-normal">
+                      {projectTaglines[project.id] || project.description}
+                    </p>
+                  </div>
+
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-full border border-white/15 bg-white/[0.04] group-hover:bg-white group-hover:text-[#09090c] text-white flex items-center justify-center transition-all shrink-0 mt-1"
+                      aria-label={`Open ${project.title}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  )}
+                </div>
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap gap-1.5 mt-3 px-1">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-white/60 font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
 
-          {/* Desktop "View all work" button */}
-          <div className="hidden md:inline-flex">
+          {/* Tubik View All Projects Button */}
+          <div className="mt-14 sm:mt-20 flex justify-center">
             <a
               href="https://github.com/keerthivasanv01"
               target="_blank"
               rel="noreferrer"
-              className="relative group rounded-full text-xs font-medium px-5 py-2.5 transition-all duration-300 focus:outline-none"
+              className="group relative inline-flex items-center justify-center rounded-full border border-white/20 bg-[#161622] hover:bg-white hover:text-[#09090c] text-white px-8 py-4 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl"
             >
-              {/* Animated gradient border on hover */}
-              <span
-                className="absolute -inset-[1px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: "linear-gradient(90deg, #89AACC 0%, #4E85BF 100%)",
-                }}
-              />
-              <span className="relative z-10 inline-flex items-center gap-2 bg-surface rounded-full px-5 py-2.5 -mx-5 -my-2.5 border border-stroke group-hover:border-transparent text-text-primary transition-colors">
-                <span>View all on GitHub</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </a>
-          </div>
-        </motion.div>
-
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6">
-          {PROJECTS.map((project, idx) => (
-            <motion.a
-              key={project.id}
-              href={project.liveUrl || "#work"}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-              className={`${project.colSpan} group relative rounded-3xl overflow-hidden bg-surface border border-stroke transition-all duration-500 hover:border-white/20 block`}
-            >
-              <div className={`relative w-full ${project.aspect} overflow-hidden bg-surface`}>
-                {/* Project Image */}
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-
-                {/* Halftone texture overlay */}
-                <div className="absolute inset-0 halftone-overlay opacity-20 mix-blend-overlay pointer-events-none" />
-
-                {/* Static gentle dark gradient at bottom */}
-                <div className="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/30 to-transparent pointer-events-none" />
-
-                {/* Default Visible Card Meta */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex items-end justify-between z-10">
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-muted mb-1.5 font-medium">
-                      {project.category} • {project.year}
-                    </div>
-                    <h3 className="text-2xl md:text-3xl font-light text-text-primary tracking-tight">
-                      {project.title}
-                    </h3>
-                  </div>
-                  
-                  <div className="w-10 h-10 rounded-full bg-surface/80 border border-stroke flex items-center justify-center text-muted group-hover:text-text-primary group-hover:border-white/30 transition-all duration-300">
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
-                </div>
-
-                {/* Hover Overlay: Dark blur + Animated Gradient Pill */}
-                <div className="absolute inset-0 bg-bg/75 opacity-0 group-hover:opacity-100 backdrop-blur-lg transition-all duration-300 flex flex-col items-center justify-center p-6 text-center z-20">
-                  {/* Hover Pill Label */}
-                  <div className="relative p-[1px] rounded-full animate-gradient-shift mb-4">
-                    <div
-                      className="absolute inset-0 rounded-full animate-gradient-shift"
-                      style={{
-                        background: "linear-gradient(90deg, #89AACC, #4E85BF, #89AACC)",
-                        backgroundSize: "200% 200%",
-                      }}
-                    />
-                    <div className="relative px-6 py-2.5 rounded-full bg-surface border border-white/10 text-text-primary text-sm font-medium flex items-center gap-2">
-                      <span>Live Demo —</span>
-                      <span className="font-display italic text-lg text-white">
-                        {project.title}
-                      </span>
-                      <ExternalLink className="w-3.5 h-3.5 ml-1 text-sky-400" />
-                    </div>
-                  </div>
-
-                  <p className="text-xs md:text-sm text-muted max-w-sm line-clamp-2 px-4 mb-4">
-                    {project.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 justify-center">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-muted"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+              <div className="roll-link">
+                <div className="roll-link-inner">
+                  <span className="roll-link-line">Explore All Repos on GitHub</span>
+                  <span className="roll-link-line">Explore All Repos on GitHub</span>
                 </div>
               </div>
-            </motion.a>
-          ))}
+              <ArrowUpRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Tubik Quick View Project Lightbox Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-8"
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-4xl rounded-[32px] overflow-hidden bg-[#14141d] border border-white/20 shadow-2xl p-6 sm:p-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center transition-all"
+                aria-label="Close project preview"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Modal Image Banner */}
+              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-[#09090c] border border-white/10">
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Modal Details */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#C9C1FF]">
+                    {selectedProject.category} • {selectedProject.year}
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-syne font-bold text-white mt-1">
+                    {selectedProject.title}
+                  </h3>
+                </div>
+
+                {selectedProject.liveUrl && (
+                  <a
+                    href={selectedProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#6344f5] hover:bg-[#785cf7] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg"
+                  >
+                    <span>Launch Live Platform</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </div>
+
+              {/* Description */}
+              <p className="text-sm sm:text-base text-white/70 leading-relaxed font-normal">
+                {selectedProject.description}
+              </p>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {selectedProject.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs uppercase tracking-wider px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-white/80 font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

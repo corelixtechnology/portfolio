@@ -8,8 +8,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ["var(--font-body)", "Inter", "sans-serif"],
-        display: ["var(--font-display)", "Instrument Serif", "serif"],
+        body: ["'Plus Jakarta Sans'", "'Inter'", "sans-serif"],
+        display: ["'Outfit'", "'Plus Jakarta Sans'", "sans-serif"],
+        outfit: ["'Outfit'", "sans-serif"],
+        space: ["'Space Grotesk'", "'Plus Jakarta Sans'", "sans-serif"],
+        syne: ["'Outfit'", "'Syne'", "sans-serif"],
       },
       colors: {
         bg: "hsl(var(--bg) / <alpha-value>)",
@@ -18,11 +21,25 @@ export default {
         muted: "hsl(var(--muted) / <alpha-value>)",
         stroke: "hsl(var(--stroke) / <alpha-value>)",
         accent: "hsl(var(--accent) / <alpha-value>)",
+        tubik: {
+          dark: "#09090c",
+          surface: "#111116",
+          card: "#16161f",
+          cardHover: "#1d1d28",
+          purple: "#6344f5",
+          purpleHover: "#785cf7",
+          lavender: "#C9C1FF",
+          mint: "#00F59B",
+          border: "rgba(255, 255, 255, 0.09)",
+          borderHover: "rgba(255, 255, 255, 0.2)",
+        }
       },
       animation: {
         "scroll-down": "scroll-down 1.5s ease-in-out infinite",
         "role-fade-in": "role-fade-in 0.4s ease-out",
         "gradient-shift": "gradient-shift 6s ease infinite",
+        "marquee": "marquee 35s linear infinite",
+        "spin-slow": "spin 20s linear infinite",
       },
     },
   },
