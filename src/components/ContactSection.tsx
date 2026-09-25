@@ -21,7 +21,7 @@ export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: 'Web Development',
+    subject: 'Full-Stack Web App',
     message: '',
   });
 
@@ -30,12 +30,12 @@ export const ContactSection: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const projectTypes = [
-    'Web Development',
-    'Full-Stack App',
-    'UI/UX Design',
-    'Mobile App',
-    'College Portal',
-    'Other Inquiry'
+    'Full-Time Job Opportunity',
+    'Full-Stack Web App',
+    'SaaS MVP Development',
+    'UI/UX & Brand Design',
+    'E-Commerce & Payments',
+    'Freelance / Contract'
   ];
 
   const handleCopyEmail = () => {
@@ -67,14 +67,13 @@ export const ContactSection: React.FC = () => {
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          access_key: USER_INFO.web3formsKey || '9a514b20-9293-4247-8300-c28760880d06',
+          access_key: USER_INFO.web3formsKey,
           name: formData.name,
           email: formData.email,
           subject: `[Portfolio Inquiry] ${formData.subject} - from ${formData.name}`,
           message: `Topic: ${formData.subject}\n\nSender Name: ${formData.name}\nSender Email: ${formData.email}\n\nMessage:\n${formData.message}`,
-          from_name: `${formData.name} via Keerthivasan Portfolio`,
+          from_name: `${formData.name} (Portfolio)`,
           replyto: formData.email,
-          to_email: 'keerthivasanvbe@gmail.com',
         }),
       });
 
@@ -129,10 +128,10 @@ export const ContactSection: React.FC = () => {
                 LET'S WORK TOGETHER
               </div>
               <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-3">
-                Have a project in mind?
+                Have a project or MVP in mind?
               </h2>
               <p className="text-xs sm:text-sm text-white/65 leading-relaxed mb-6">
-                I'm always open to discussing new opportunities, web applications, freelance projects, or institutional systems. Send me a message and I'll reply promptly to <span className="text-purple-300 font-mono">{USER_INFO.email}</span>.
+                Looking for a dedicated freelance full-stack developer to bring your idea to life? Fill in the details below or email directly to <span className="text-purple-300 font-mono">{USER_INFO.email}</span>. I typically respond within 2-4 hours.
               </p>
             </div>
 

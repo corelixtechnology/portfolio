@@ -46,22 +46,23 @@ export const USER_INFO = {
   firstName: "Keerthivasan",
   lastName: "V",
   initials: "KV",
-  tagline: "CRAFTING SCALABLE & HIGH-PERFORMANCE WEB EXPERIENCES",
-  eyebrow: "AVAILABLE FOR HIRE // FULL-STACK",
-  roleTitle: "Full Stack Developer",
-  heroDescription: "I build exceptional digital experiences with modern technologies. Passionate about creating efficient, scalable and user-friendly web applications.",
-  aboutDescription: "I am a Full Stack Developer with 3+ years of experience in building modern web applications. I specialize in React.js, Node.js, Express.js and MongoDB. I love turning ideas into real products.",
-  bio: "Full Stack Developer specializing in React.js, Node.js, Express.js, MongoDB, and modern web applications.",
+  tagline: "FULL-STACK DEVELOPER • FREELANCER • OPEN TO WORK",
+  eyebrow: "OPEN TO WORK (FULL-TIME / REMOTE) & FREELANCE PROJECTS",
+  roleTitle: "Full-Stack Developer | Freelancer & Consultant",
+  heroDescription: "Full-Stack Developer specializing in React.js, Node.js, Express, and MongoDB. Open to full-time engineering roles, remote positions, and freelance client projects worldwide.",
+  aboutDescription: "I am a versatile Full-Stack Developer and Freelancer with 3+ years of experience engineering high-performance web systems, robust backend architectures, and pixel-perfect UIs. Currently open to full-time developer opportunities as well as bespoke freelance projects.",
+  bio: "Full Stack Developer & Freelancer specializing in React.js, Node.js, Express.js, MongoDB, and modern web applications. Open to work.",
+  availabilityStatus: "Open to Work (Full-Time / Remote) & Freelance Contracts",
   location: "Coimbatore, Tamil Nadu, India",
   email: "keerthivasanvbe@gmail.com",
   phone: "+91 93604 10038",
   displayPhone: "+91 93604 10038",
-  whatsappUrl: "https://api.whatsapp.com/send?phone=+919360410038&text=Hi%20Keerthivasan,%20I'd%20like%20to%20discuss%20a%20project.",
+  whatsappUrl: "https://api.whatsapp.com/send?phone=+919360410038&text=Hi%20Keerthivasan,%20I'd%20like%20to%20discuss%20a%20freelance%20project.",
   instagramUrl: "https://www.instagram.com/x_kv_01",
   linkedinUrl: "https://www.linkedin.com/in/keerthivasanv07",
   githubUrl: "https://github.com/keerthivasanv01",
   githubHandle: "github.com/keerthivasanv01",
-  web3formsKey: "9a514b20-9293-4247-8300-c28760880d06",
+  web3formsKey: "4c413b26-4dfb-47a4-b10e-b2c86b8e45d8",
   avatar: "/assets/img/hero.png",
   aboutImage: "/assets/img/pp2.jpg",
   realPhoto: "/assets/img/pp2.jpg",
@@ -270,19 +271,19 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     title: "Sai boutique  E-Commerce Web App",
     category: "Full Stack",
     badge: "Full Stack",
-    image: "/assets/img/image.png",
+    image: "/assets/img/saiboutique.png",
     description: "A complete MERN stack e-commerce application with admin panel, shopping cart, and checkout flow.",
     techIcons: ["react", "node", "mongodb", "javascript"],
     liveUrl: "https://thesaiboutique.com",
   },
   {
     id: "easa-college",
-    title: "EASA College Website",
-    category: "Institutional Portal",
-    badge: "React",
+    title: "EASA College of Engineering & Technology",
+    category: "MERN Stack & Admissions Portal",
+    badge: "MERN • High Traffic & SEO",
     image: "/assets/img/easa_college.jpg",
-    description: "Modern and responsive college website with all essential academic features, department catalogs, and fast UI.",
-    techIcons: ["react", "tailwind", "javascript","Node","mongodb"],
+    description: "Architected and maintain the high-traffic MERN stack institutional portal. Implemented technical SEO and automated lead-generation funnels that directly boosted student admissions and handled high concurrent visitor traffic.",
+    techIcons: ["react", "node", "mongodb", "express", "tailwind", "javascript"],
     liveUrl: "https://easacollege.com",
   },
   {
@@ -320,7 +321,7 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     title: "Nova Electrical Control App",
     category: "Mobile & Smart Home",
     badge: "Android App / APK",
-    image: "/assets/img/image copy 2.png",
+    image: "/assets/img/nova_app.png",
     description: "Smart home electrical control mobile application for house automation, lighting control, and appliance switching over IoT.",
     techIcons: ["react", "node", "javascript", "mongodb"],
     liveUrl: "https://nova.corelixtechnology.in.net",
@@ -332,7 +333,7 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     title: "Corelix Food Platform",
     category: "Full Stack Web App",
     badge: "Food Ordering",
-    image: "/assets/img/image copy.png",
+    image: "/assets/img/corelix_food.png",
     description: "Online food ordering and restaurant management platform with live order tracking, menu indexing, and instant checkout.",
     techIcons: ["react", "node", "mongodb", "express"],
     liveUrl: "https://food.corelixtechnology.in.net",
@@ -342,15 +343,15 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
 export const EXPERIENCES_TIMELINE: ExperienceTimelineItem[] = [
   {
     period: "Jan 2026 - Present",
-    role: "Web Developer",
+    role: "Full-Stack Web Developer",
     company: "EASA College of Engineering and Technology",
-    description: "Developing and maintaining responsive college web portals, student information systems, and academic department web apps."
+    description: "Architected and actively maintain the institutional MERN stack platform. Handled high-traffic concurrency, built automated admission lead-generation funnels, and spearheaded technical SEO strategies that directly boosted prospective student enrollments."
   },
   {
     period: "2023 - 2025",
-    role: "Software Engineer",
+    role: "Software Engineer (Gaming & Full-Stack)",
     company: "Prudent Gaming India",
-    description: "Worked on scalable web applications using MERN stack and modern technologies, integrating robust APIs and cross-platform services."
+    description: "Engineered cross-platform real-time gaming and casino/betting platforms using cutting-edge technologies. Developed core game logic, high-concurrency state management, real-time WebSocket communication, and secure financial/wallet transaction systems."
   },
   {
     period: "2022 - 2023",
@@ -368,41 +369,77 @@ export const EXPERIENCES_TIMELINE: ExperienceTimelineItem[] = [
 
 export const SERVICES_LIST: ServiceCardItem[] = [
   {
-    title: "Web Development",
-    description: "Custom websites and web applications with modern architecture.",
+    title: "Full-Stack Web Apps & SaaS MVPs",
+    description: "End-to-end custom web applications built with React.js, Node.js, Express & MongoDB. Fast, modular, and built to scale.",
     icon: "code",
-    accentColor: "#3B82F6"
+    accentColor: "#38bdf8"
   },
   {
-    title: "App Development",
-    description: "Cross-platform mobile applications for iOS & Android.",
-    icon: "smartphone",
-    accentColor: "#8B5CF6"
-  },
-  {
-    title: "UI/UX Design",
-    description: "Beautiful and user-friendly interfaces crafted in Figma.",
+    title: "High-Converting UI/UX Design",
+    description: "Modern, interactive Figma interfaces and design systems engineered for high user engagement and conversion rates.",
     icon: "palette",
-    accentColor: "#A855F7"
+    accentColor: "#a855f7"
   },
   {
-    title: "E-Commerce",
-    description: "Secure and scalable online stores with checkout flows.",
+    title: "Cross-Platform Mobile Apps",
+    description: "Intuitive, high-performance mobile applications and PWAs for iOS and Android with smooth offline-first experiences.",
+    icon: "smartphone",
+    accentColor: "#818cf8"
+  },
+  {
+    title: "E-Commerce & Payment Gateways",
+    description: "Secure, high-converting online stores with custom checkout flows, inventory systems, Stripe/Razorpay integrations.",
     icon: "shopping-bag",
-    accentColor: "#EC4899"
+    accentColor: "#f472b6"
   },
   {
-    title: "API Development",
-    description: "RESTful APIs and scalable backend microservices.",
+    title: "RESTful APIs & Database Systems",
+    description: "Secure, highly optimized backend architectures, microservices, JWT authentication, and MongoDB/SQL database schemas.",
     icon: "database",
-    accentColor: "#10B981"
+    accentColor: "#34d399"
   },
   {
-    title: "SEO Optimization",
-    description: "Improve your website ranking, speeds and search performance.",
+    title: "Technical SEO & Speed Optimization",
+    description: "Core Web Vitals optimization, 95+ PageSpeed scores, structured data, and keyword ranking for maximum client reach.",
     icon: "gauge",
-    accentColor: "#06B6D4"
+    accentColor: "#38bdf8"
   }
+];
+
+export interface FreelanceStep {
+  step: string;
+  title: string;
+  description: string;
+}
+
+export const FREELANCE_WORKFLOW: FreelanceStep[] = [
+  {
+    step: "01",
+    title: "Discovery & Strategy",
+    description: "We align on your project goals, user requirements, timeline, and tech stack to create a clear roadmap."
+  },
+  {
+    step: "02",
+    title: "UI/UX & Prototyping",
+    description: "Designing high-fidelity Figma mockups and interactive flows tailored to your brand identity."
+  },
+  {
+    step: "03",
+    title: "Full-Stack Development",
+    description: "Writing clean, modular React & Node.js code with responsive layouts, secure APIs, and database modeling."
+  },
+  {
+    step: "04",
+    title: "Testing, SEO & Launch",
+    description: "Comprehensive QA testing, performance audits, technical SEO indexing, and smooth production deployment."
+  }
+];
+
+export const FREELANCE_BENEFITS = [
+  { title: "Direct 1-on-1 Communication", desc: "No middle managers. You work directly with the developer building your product." },
+  { title: "Blazing Fast Turnaround", desc: "Rapid sprints and milestone-driven delivery to get your MVP to market faster." },
+  { title: "Clean, Scalable Architecture", desc: "Production-ready, documented code that grows effortlessly with your business." },
+  { title: "Post-Launch Support & SEO", desc: "Complete handover, training, bug warranty, and built-in search engine optimization." }
 ];
 
 export const PROJECTS: Project[] = FEATURED_PROJECTS.map((p) => ({
@@ -478,18 +515,18 @@ export const STATS: StatItem[] = [
 
 export const EXPERIENCES: ExperienceItem[] = [
   {
-    role: "Web Developer",
+    role: "Full-Stack Web Developer",
     company: "EASA College of Engineering and Technology",
     duration: "Jan 2026 – Present",
-    description: "Developing and maintaining responsive college web portals, academic department systems, and student management applications.",
-    technologies: ["React JS", "Node.js", "Tailwind CSS", "JavaScript", "RESTful APIs"]
+    description: "Developed and maintain the core MERN stack college web platform with high-traffic architecture. Implemented comprehensive technical SEO and digital lead-generation funnels that successfully drove online student admissions and inquiries.",
+    technologies: ["React JS", "Node.js", "MongoDB", "Express.js", "SEO & Lead Gen", "Tailwind CSS", "RESTful APIs"]
   },
   {
-    role: "Software Engineer",
+    role: "Software Engineer (Gaming & Full-Stack)",
     company: "Prudent Gaming India",
     duration: "2023 – 2025",
-    description: "Worked on scalable web applications using MERN stack and modern technologies, integrating robust APIs and cross-platform services.",
-    technologies: ["React JS", "Node.js", "MongoDB", "Express.js", "RESTful APIs"]
+    description: "Developed and scaled cross-platform online gaming and casino/betting applications with modern MERN and real-time architectures. Implemented core game engines, RNG mechanics, secure transaction/wallet integrations, and low-latency WebSocket multiplayer sync.",
+    technologies: ["React JS", "Node.js", "WebSockets / Socket.io", "MongoDB", "Express.js", "Real-Time Game Logic", "Cross-Platform", "RESTful APIs"]
   },
   {
     role: "Web Developer Intern",

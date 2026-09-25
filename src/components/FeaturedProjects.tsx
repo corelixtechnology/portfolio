@@ -101,6 +101,12 @@ export const FeaturedProjects: React.FC = () => {
                   <img
                     src={project.image}
                     alt={project.title}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('work4.jpg')) {
+                        target.src = '/assets/img/work4.jpg';
+                      }
+                    }}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0f111f]/85 via-transparent to-transparent pointer-events-none" />

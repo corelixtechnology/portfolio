@@ -47,17 +47,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
           
           {/* Left Column: Typography & CTAs */}
           <div className="lg:col-span-6 flex flex-col justify-center">
-            {/* Tag */}
+            {/* Dual Availability Badges */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-xs font-bold tracking-[0.2em] text-[#38bdf8] uppercase mb-2 sm:mb-3"
+              className="flex flex-wrap items-center gap-2.5 mb-3.5"
             >
-              HELLO, I'M
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono font-medium shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>OPEN TO WORK (FULL-TIME / REMOTE)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-mono font-medium shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                <span className="text-cyan-400">✦</span>
+                <span>FREELANCE & CLIENT PROJECTS</span>
+              </div>
             </motion.div>
 
-            {/* Headline - refined and smaller font size */}
+            {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -74,9 +82,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="text-xl sm:text-2xl md:text-3xl font-syne font-bold text-white mb-5"
             >
-              Full Stack{" "}
-              <span className="bg-gradient-to-r from-[#9333ea] via-[#a855f7] to-[#c084fc] bg-clip-text text-transparent">
-                Developer
+              Full Stack Developer{" "}
+              <span className="bg-gradient-to-r from-[#38bdf8] via-[#818cf8] to-[#c084fc] bg-clip-text text-transparent">
+                & Freelance Consultant
               </span>
             </motion.h2>
 
@@ -90,7 +98,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               {USER_INFO.heroDescription}
             </motion.p>
 
-            {/* Buttons */}
+            {/* Buttons / CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,11 +106,18 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               className="flex flex-wrap items-center gap-3.5 sm:gap-4 mb-8 sm:mb-10"
             >
               <a
-                href="#projects"
+                href="#contact"
                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#6366f1] via-[#7c3aed] to-[#9333ea] hover:from-[#4f46e5] hover:to-[#7e22ce] shadow-[0_0_25px_rgba(124,58,237,0.45)] hover:shadow-[0_0_35px_rgba(124,58,237,0.7)] transition-all duration-300 hover:scale-105 active:scale-95"
               >
-                <span>View My Work</span>
+                <span>Hire Me / Let's Talk</span>
                 <ArrowUpRight className="w-4 h-4" />
+              </a>
+
+              <a
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-full font-semibold text-xs sm:text-sm text-white/90 bg-[#141624]/80 hover:bg-[#1f2238] border border-white/15 hover:border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <span>View My Work</span>
               </a>
 
               <a
@@ -111,10 +126,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onOpenResume}
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-full font-semibold text-xs sm:text-sm text-white/90 bg-[#141624]/80 hover:bg-[#1f2238] border border-white/15 hover:border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full font-semibold text-xs text-white/70 hover:text-white hover:bg-white/5 transition-all duration-300"
               >
-                <span>Download CV</span>
-                <Download className="w-4 h-4" />
+                <Download className="w-3.5 h-3.5" />
+                <span>Resume</span>
               </a>
             </motion.div>
 

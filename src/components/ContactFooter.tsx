@@ -94,8 +94,10 @@ export const ContactFooter: React.FC = () => {
           access_key: USER_INFO.web3formsKey,
           name: formData.name,
           email: formData.email,
-          message: `[Services: ${selectedServices.join(', ')}]\n\n${formData.message}`,
-          from_name: `${formData.name} (Tubik Portfolio Inquiry)`
+          subject: `[Portfolio Inquiry] from ${formData.name}`,
+          message: `Services Requested: ${selectedServices.join(', ')}\n\nMessage:\n${formData.message}`,
+          from_name: `${formData.name} (Portfolio)`,
+          replyto: formData.email
         })
       });
 
