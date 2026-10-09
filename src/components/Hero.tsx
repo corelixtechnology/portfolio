@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Download, Github, Linkedin, Instagram, Mail } from 'lucide-react';
+import { ArrowUpRight, Download, Github, Linkedin, Instagram, Mail, FileText } from 'lucide-react';
 import { USER_INFO, SOCIAL_LINKS } from '../data/content';
 import { TechIcon } from './TechIcons';
+import { downloadResumePdf } from '../utils/downloadResume';
 
 interface HeroProps {
   onOpenResume?: () => void;
@@ -120,17 +121,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 <span>View My Work</span>
               </a>
 
-              <a
-                href={USER_INFO.resumeUrl}
-                download="Keerthivasan_V_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={(e) => downloadResumePdf(e)}
+                title="Download genuine PDF resume directly to disk"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-3 rounded-full font-semibold text-xs text-white bg-white/10 hover:bg-white/15 border border-white/15 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105 active:scale-95 shadow-md"
+              >
+                <Download className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Download PDF</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={onOpenResume}
+                title="View interactive Curriculum Vitae"
                 className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full font-semibold text-xs text-white/70 hover:text-white hover:bg-white/5 transition-all duration-300"
               >
-                <Download className="w-3.5 h-3.5" />
-                <span>Resume</span>
-              </a>
+                <FileText className="w-3.5 h-3.5 text-purple-400" />
+                <span>View CV</span>
+              </button>
             </motion.div>
 
             {/* Connect With Me */}

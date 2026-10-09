@@ -10,7 +10,8 @@ import {
   CheckCircle2,
   ArrowRight,
   Sparkles,
-  GraduationCap
+  GraduationCap,
+  ShieldCheck
 } from 'lucide-react';
 import { 
   EXPERIENCES_TIMELINE, 
@@ -24,6 +25,8 @@ export const ExperienceServices: React.FC = () => {
   const getServiceIcon = (iconName: string, color: string) => {
     const props = { className: "w-5 h-5", style: { color } };
     switch (iconName) {
+      case 'shield-check':
+        return <ShieldCheck {...props} />;
       case 'code':
         return <Code {...props} />;
       case 'smartphone':

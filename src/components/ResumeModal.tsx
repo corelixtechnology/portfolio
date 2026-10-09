@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Briefcase, GraduationCap, Code2, Download, FolderGit2, ExternalLink } from 'lucide-react';
+import { X, Briefcase, GraduationCap, Code2, Download, FolderGit2, ExternalLink, Printer, Check } from 'lucide-react';
 import { USER_INFO, EXPERIENCES, EDUCATIONS, SKILL_CATEGORIES, PROJECTS } from '../data/content';
+import { downloadResumePdf } from '../utils/downloadResume';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -9,7 +10,18 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  const resumeUrl = USER_INFO.resumeUrl || '/Keerthivasan_V_Resume.pdf';
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    setDownloading(true);
+    await downloadResumePdf(e);
+    setTimeout(() => setDownloading(false), 1500);
+  };
+
+  const handlePrint = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.print();
+  };
 
   return (
     <AnimatePresence>
@@ -18,7 +30,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl overflow-y-auto"
+          className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl overflow-y-auto print:p-0 print:bg-white"
           onClick={onClose}
         >
           <motion.div
@@ -26,33 +38,50 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative max-w-3xl w-full max-h-[92vh] overflow-y-auto bg-surface border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-2xl my-auto text-left"
+            className="relative max-w-3xl w-full max-h-[92vh] overflow-y-auto bg-surface border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-2xl my-auto text-left print:max-h-none print:border-none print:bg-white print:text-black print:p-0"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header / Actions */}
-            <div className="flex flex-col sm:flex-row items-start justify-between border-b border-stroke pb-5 sm:pb-6 mb-6 gap-4">
+            <div className="flex flex-col sm:flex-row items-start justify-between border-b border-stroke pb-5 sm:pb-6 mb-6 gap-4 print:border-black/20">
               <div>
-                <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted font-medium">Curriculum Vitae</span>
-                <h2 className="text-2xl sm:text-4xl font-display italic text-text-primary mt-1">
+                <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-muted font-medium print:text-black/60">Curriculum Vitae</span>
+                <h2 className="text-2xl sm:text-4xl font-display italic text-text-primary mt-1 print:text-black">
                   {USER_INFO.name}
                 </h2>
-                <p className="text-xs text-muted mt-1 leading-relaxed">
+                <p className="text-xs text-muted mt-1 leading-relaxed print:text-black/70">
                   Full-Stack Developer & UI/UX Designer • {USER_INFO.email} • {USER_INFO.phone}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 sm:gap-3 shrink-0 self-end sm:self-start">
-                <a
-                  href={resumeUrl}
-                  download="Keerthivasan_V_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs uppercase tracking-wider font-semibold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white text-bg hover:bg-white/90 hover:scale-105 active:scale-95 transition-all shadow-lg"
+              <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 self-end sm:self-start print:hidden">
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  title="Download genuine PDF file directly"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs uppercase tracking-wider font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 text-white hover:brightness-110 hover:scale-105 active:scale-95 transition-all shadow-lg"
                 >
-                  <Download className="w-3.5 h-3.5 text-bg" />
-                  <span className="hidden sm:inline">Download PDF</span>
-                  <span className="sm:hidden">PDF</span>
-                </a>
+                  {downloading ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-white" />
+                      <span>Saved!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-3.5 h-3.5 text-white" />
+                      <span>Download PDF</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  title="Print / Save as PDF via browser print"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-bg border border-stroke text-muted hover:text-white flex items-center justify-center transition-colors hover:border-white/30 active:scale-95"
+                  aria-label="Print or save as PDF"
+                >
+                  <Printer className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                </button>
 
                 <button
                   type="button"
@@ -175,23 +204,32 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               </div>
 
               {/* Bottom Download CTA Card */}
-              <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-white/[0.07] to-white/[0.02] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 sm:mt-8 text-center sm:text-left">
+              <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-white/[0.07] to-white/[0.02] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 sm:mt-8 text-center sm:text-left print:hidden">
                 <div>
-                  <h4 className="text-sm font-semibold text-text-primary">Download Complete Resume</h4>
+                  <h4 className="text-sm font-semibold text-text-primary">Download Complete Resume (PDF)</h4>
                   <p className="text-xs text-muted mt-0.5">
                     Official PDF formatted for recruiters and hiring managers.
                   </p>
                 </div>
-                <a
-                  href={resumeUrl}
-                  download="Keerthivasan_V_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider px-6 py-3 rounded-full bg-white text-bg hover:bg-white/90 hover:scale-105 active:scale-95 transition-all shadow-xl"
-                >
-                  <Download className="w-4 h-4 text-bg" />
-                  <span>Download PDF</span>
-                </a>
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider px-6 py-3 rounded-full bg-white text-bg hover:bg-white/90 hover:scale-105 active:scale-95 transition-all shadow-xl"
+                  >
+                    <Download className="w-4 h-4 text-bg" />
+                    <span>{downloading ? 'Downloading...' : 'Download PDF'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="hidden sm:inline-flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider px-4 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white transition-all"
+                    title="Print or Save as PDF"
+                  >
+                    <Printer className="w-4 h-4 text-white" />
+                    <span>Print</span>
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

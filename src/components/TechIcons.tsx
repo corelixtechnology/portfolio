@@ -286,6 +286,134 @@ export const TechIcon: React.FC<TechIconProps> = ({ name, className = "w-6 h-6",
         </svg>
       );
 
+    // 25. Playwright Automation (Official Masks)
+    case 'playwright':
+    case 'playwright automation':
+    case 'playwright testing':
+      return (
+        <svg viewBox="0 0 128 128" width={size} height={size} className={className} fill="none">
+          <rect width="128" height="128" rx="28" fill="#111827" stroke="#2EAD33" strokeWidth="2.5" />
+          {/* Playwright Green Mask */}
+          <path d="M48 30c-15.5 0-28 12.5-28 28 0 20 15 39 30 46 3.8 1.8 8.2 1.8 12 0 4.5-2.2 8.8-5.3 12.5-9.2-5-9.8-6.8-21.2-5.4-32.5.6-5.8-2.2-11.8-6.8-16.2-4.6-4.1-10.8-6.3-17.3-6.3h-7z" fill="#2EAD33" />
+          <circle cx="39" cy="52" r="4.5" fill="#111827" />
+          <circle cx="56" cy="52" r="4.5" fill="#111827" />
+          <path d="M40 70c4.5 4.5 13 4.5 17.5 0" stroke="#111827" strokeWidth="3.2" strokeLinecap="round" />
+          {/* Playwright Coral/Red Mask */}
+          <path d="M80 30c15.5 0 28 12.5 28 28 0 20-15 39-30 46-3.8 1.8-8.2 1.8-12 0-4.5-2.2-8.8-5.3-12.5-9.2 5-9.8 6.8-21.2 5.4-32.5-.6-5.8 2.2-11.8 6.8-16.2 4.6-4.1 10.8-6.3 17.3-6.3h7z" fill="#E05D44" />
+          <circle cx="72" cy="52" r="4.5" fill="#111827" />
+          <circle cx="89" cy="52" r="4.5" fill="#111827" />
+          <path d="M70.5 70c4.5 4.5 13 4.5 17.5 0" stroke="#111827" strokeWidth="3.2" strokeLinecap="round" />
+        </svg>
+      );
+
+    // 26. AI Agents & MCP (Model Context Protocol) Workflows
+    case 'ai agents & mcp':
+    case 'ai agents & mcp qa':
+    case 'ai agents & mcp automation':
+    case 'ai agents':
+    case 'mcp':
+    case 'ai qa workflows':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#110d29" stroke="#8B5CF6" strokeWidth="2" />
+          {/* Central MCP Core */}
+          <circle cx="32" cy="32" r="9" fill="#7C3AED" fillOpacity="0.45" stroke="#A78BFA" strokeWidth="2.2" />
+          <circle cx="32" cy="32" r="4" fill="#DDD6FE" />
+          {/* Context Protocol Peripheral Nodes */}
+          <circle cx="16" cy="22" r="4" fill="#38BDF8" />
+          <circle cx="48" cy="22" r="4" fill="#38BDF8" />
+          <circle cx="19" cy="46" r="4" fill="#34D399" />
+          <circle cx="45" cy="46" r="4" fill="#F59E0B" />
+          {/* Signal Conduits */}
+          <line x1="19.5" y1="24.5" x2="25.5" y2="28" stroke="#38BDF8" strokeWidth="2" strokeDasharray="2 2" />
+          <line x1="44.5" y1="24.5" x2="38.5" y2="28" stroke="#38BDF8" strokeWidth="2" strokeDasharray="2 2" />
+          <line x1="22.5" y1="43.5" x2="26.5" y2="37" stroke="#34D399" strokeWidth="2" strokeDasharray="2 2" />
+          <line x1="41.5" y1="43.5" x2="37.5" y2="37" stroke="#F59E0B" strokeWidth="2" strokeDasharray="2 2" />
+          {/* AI Sparkle */}
+          <path d="M32 9l1.8 5.2L39 16l-5.2 1.8L32 23l-1.8-5.2L25 16l5.2-1.8L32 9z" fill="#F472B6" />
+        </svg>
+      );
+
+    // 27. Regression Frameworks & Automation Cycles
+    case 'regression frameworks':
+    case 'javascript regression frameworks':
+    case 'regression testing':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#1c1404" stroke="#F59E0B" strokeWidth="2" />
+          <path d="M32 15a17 17 0 1 1-14.5 8.2" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+          <path d="M17.5 16v7.5h7.5" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Shield & Pass Check */}
+          <path d="M32 23l9 4.5v7.5c0 6.5-4 12-9 14-5-2-9-7.5-9-14V27.5L32 23z" fill="#065f46" stroke="#10B981" strokeWidth="2" />
+          <path d="M28 35l3 3 6-6" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    // 28. Functional & UI Testing
+    case 'functional & ui testing':
+    case 'functional testing':
+    case 'ui testing':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#09182a" stroke="#38BDF8" strokeWidth="2" />
+          <rect x="14" y="16" width="36" height="32" rx="4" stroke="#38BDF8" strokeWidth="2.2" />
+          <line x1="14" y1="24" x2="50" y2="24" stroke="#38BDF8" strokeWidth="1.8" />
+          <circle cx="19" cy="20" r="1.5" fill="#EF4444" />
+          <circle cx="24" cy="20" r="1.5" fill="#F59E0B" />
+          <circle cx="29" cy="20" r="1.5" fill="#10B981" />
+          {/* Automated UI Inspection Checkmark */}
+          <circle cx="32" cy="36" r="8" fill="#0284c7" fillOpacity="0.4" />
+          <path d="M26 36l4 4 9-9" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    // 29. Mobile Testing (Appium / Responsive QA)
+    case 'mobile testing':
+    case 'mobile & api testing':
+    case 'mobile qa':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#071b26" stroke="#06B6D4" strokeWidth="2" />
+          <rect x="20" y="13" width="24" height="38" rx="4.5" stroke="#06B6D4" strokeWidth="2.4" />
+          <line x1="28" y1="17.5" x2="36" y2="17.5" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="32" cy="46" r="1.8" fill="#06B6D4" />
+          {/* Floating Pass Badge */}
+          <circle cx="43" cy="33" r="8.5" fill="#10B981" stroke="#071b26" strokeWidth="2" />
+          <path d="M39.5 33l2.5 2.5 4.5-4.5" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    // 30. eCommerce Domain QA & Testing
+    case 'ecommerce domain qa':
+    case 'ecommerce testing':
+    case 'ecommerce qa':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#240c1d" stroke="#EC4899" strokeWidth="2" />
+          <path d="M16 19h6l4.8 19.5h18.2l4.2-14.5H25" stroke="#EC4899" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="29" cy="46" r="2.8" fill="#EC4899" />
+          <circle cx="43" cy="46" r="2.8" fill="#EC4899" />
+          {/* Quality Checked Badge */}
+          <circle cx="37" cy="27" r="8" fill="#10B981" stroke="#240c1d" strokeWidth="2" />
+          <path d="M34 27l2 2 4.5-4.5" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    // 31. Stakeholder Management & Client Communication
+    case 'stakeholder management':
+    case 'stakeholder & client qa':
+    case 'client communication':
+      return (
+        <svg viewBox="0 0 64 64" width={size} height={size} className={className} fill="none">
+          <rect width="64" height="64" rx="16" fill="#0d1b2e" stroke="#60A5FA" strokeWidth="2" />
+          <circle cx="25" cy="25" r="6" stroke="#60A5FA" strokeWidth="2.2" />
+          <path d="M14 43c0-6 5-8.5 11-8.5s11 2.5 11 8.5" stroke="#60A5FA" strokeWidth="2.2" />
+          <circle cx="43" cy="23" r="5" stroke="#93C5FD" strokeWidth="1.8" />
+          <path d="M34 40c0-4.5 4-6.5 9-6.5s9 2 9 6.5" stroke="#93C5FD" strokeWidth="1.8" />
+          <path d="M33 18l3 3 5-5" stroke="#34D399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
     default:
       return (
         <div className="w-6 h-6 rounded-full bg-cyan-400/20 border border-cyan-400/50 flex items-center justify-center text-[10px] font-bold text-white">

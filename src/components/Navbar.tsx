@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Rocket } from 'lucide-react';
+import { Menu, X, Rocket, Download } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { downloadResumePdf } from '../utils/downloadResume';
 
 interface NavbarProps {
   onOpenTalk?: () => void;
@@ -23,21 +24,38 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTalk }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 30);
 
-      const sections = ["home", "about", "skills", "projects", "experience", "services", "contact"];
-      const scrollPosition = window.scrollY + 200;
+      // 1. If at or near the very top of the page, activate "home"
+      if (scrollY < 140) {
+        setActiveSection("home");
+        return;
+      }
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
+      // 2. If scrolled near the bottom of the page, activate "contact"
+      if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 150) {
+        setActiveSection("contact");
+        return;
+      }
+
+      // 3. Check each section accurately using getBoundingClientRect
+      const sections = ["contact", "services", "experience", "projects", "skills", "about", "home"];
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // Active when the section top has entered the upper region of the viewport
+          if (rect.top <= 260 && rect.bottom >= 100) {
+            setActiveSection(id);
+            return;
+          }
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Run immediately on mount
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -96,8 +114,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTalk }) => {
             })}
           </div>
 
-          {/* 3. Right: "Let's Talk 🚀" Glowing Pill CTA */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* 3. Right: "Resume (PDF)" & "Let's Talk 🚀" Glowing Pill CTA */}
+          <div className="hidden sm:flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={(e) => downloadResumePdf(e)}
+              title="Download PDF Resume directly"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-white/85 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/40 transition-all duration-300 active:scale-95"
+            >
+              <Download className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Resume (PDF)</span>
+            </button>
+
             <a
               href="#contact"
               onClick={(e) => {
@@ -113,13 +141,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTalk }) => {
 
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-2">
-            <a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, "contact")}
-              className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+            <button
+              type="button"
+              onClick={(e) => downloadResumePdf(e)}
+              title="Download PDF Resume directly"
+              className="px-3 py-1.5 rounded-full text-xs font-semibold bg-white/10 text-white flex items-center gap-1"
             >
-              Let's Talk
-            </a>
+              <Download className="w-3 h-3 text-cyan-400" />
+              <span>PDF</span>
+            </button>
 
             <button
               type="button"
@@ -172,7 +202,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTalk }) => {
                 ))}
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    downloadResumePdf(e);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs tracking-wide border border-white/15"
+                >
+                  <Download className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Download Resume (PDF)</span>
+                </button>
+
                 <a
                   href="#contact"
                   onClick={(e) => scrollToSection(e, "contact")}
